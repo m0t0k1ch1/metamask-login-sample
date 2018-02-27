@@ -38,6 +38,7 @@ new Vue({
         .catch((e) => {
           if (this.errorMessage != null) {
             alert(this.errorMessage)
+            this.errorMessage = null
           }
           throw e
         })
