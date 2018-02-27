@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "ethjs": "^0.3.3",
     "vue": "^2.5.13"
   },
   "devDependencies": {
