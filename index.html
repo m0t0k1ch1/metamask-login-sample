@@ -10,6 +10,9 @@
   <body class="text-center">
     <div id="app">
       <div>
+        <template v-if="errorMessage != null">
+          <div class="alert alert-warning" role="alert">{{ errorMessage }}</div>
+        </template>
         <button type="button" class="btn btn-primary" v-on:click="login">Login with MetaMask</button>
       </div>
     </div>

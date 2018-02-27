@@ -14,7 +14,7 @@ new Vue({
       var app = this
 
       if (typeof web3 === 'undefined') {
-        alert('Please install MetaMask')
+        app.errorMessage = 'Please install MetaMask'
         return
       }
 
@@ -23,23 +23,20 @@ new Vue({
       eth.accounts()
         .then((accounts) => {
           if (accounts.length <= 0) {
-            this.errorMessage = 'Please unlock MetaMask account'
-            throw this.errorMessage
+            app.errorMessage = 'Please unlock MetaMask account'
+            throw app.errorMessage
           }
           return eth.net_version()
         })
         .then((netVersion) => {
           if (netVersion !== '3') {
-            this.errorMessage = 'Please connect MetaMask to Ropsten Test Network'
-            throw this.errorMessage
+            app.errorMessage = 'Please connect MetaMask to Ropsten Test Network'
+            throw app.errorMessage
           }
+          app.errorMessage = null
           alert('ok') // TODO
         })
         .catch((e) => {
-          if (this.errorMessage != null) {
-            alert(this.errorMessage)
-            this.errorMessage = null
-          }
           throw e
         })
     },
