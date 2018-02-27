@@ -11,7 +11,7 @@ new Vue({
   },
   methods: {
     login: function() {
-      var app = this
+      let app = this
 
       if (typeof web3 === 'undefined') {
         app.errorMessage = 'Please install MetaMask'
