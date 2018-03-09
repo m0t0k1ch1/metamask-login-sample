@@ -59,7 +59,8 @@ new Vue({
                 if (data.error.code === -32603) {
                   console.log('User denied message signature')
                   return
-                } else {
+                }
+                else {
                   throw data.error
                 }
               }
