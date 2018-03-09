@@ -26,18 +26,18 @@ new Vue({
             app.errorMessage = 'Please unlock MetaMask account'
             throw app.errorMessage
           }
-          return eth.net_version()
-        })
-        .then((netVersion) => {
-          if (netVersion !== '3') {
-            app.errorMessage = 'Please connect MetaMask to Ropsten Test Network'
-            throw app.errorMessage
-          }
-          app.errorMessage = null
-          alert('ok') // TODO
-        })
-        .catch((e) => {
-          throw e
+
+          eth.net_version().then((netVersion) => {
+            if (netVersion !== '3') {
+              app.errorMessage = 'Please connect MetaMask to Ropsten Test Network'
+              throw app.errorMessage
+            }
+
+            // clean up error message
+            app.errorMessage = null
+
+            console.log(accounts[0]); // TODO
+          })
         })
     },
   },
