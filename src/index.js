@@ -36,7 +36,38 @@ new Vue({
             // clean up error message
             app.errorMessage = null
 
-            console.log(accounts[0]); // TODO
+            const msgParams = [
+              {
+                type: 'string',
+                name: 'message',
+                value: 'Hi, Alice!',
+              },
+              {
+                type: 'uint32',
+                name: 'value',
+                value: 42,
+              },
+            ]
+
+            web3.currentProvider.sendAsync({
+              method: 'eth_signTypedData',
+              params: [msgParams, accounts[0]],
+              from: accounts[0],
+            }, (err, data) => {
+              if (err) throw err
+              if (data.error) {
+                if (data.error.code === -32603) {
+                  console.log('User denied message signature')
+                  return
+                } else {
+                  throw data.error
+                }
+              }
+
+              let sig = data.result
+
+              console.log(sig) // TODO
+            })
           })
         })
     },
