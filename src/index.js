@@ -22,7 +22,7 @@ let app = new Vue({
       let $this = this
 
       if (!$this.isInitialized) {
-        throw new AppError('Initializeation has not completed yet')
+        throw new AppError('Initialization has not completed yet')
       }
 
       let accounts = []
