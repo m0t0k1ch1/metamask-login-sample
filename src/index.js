@@ -1,8 +1,15 @@
 import 'babel-polyfill'
 import Vue from 'vue/dist/vue.esm.js'
-import Eth from 'ethjs'
+import Web3 from 'web3'
 
-let eth
+function AppError(message) {
+  this.message = message
+}
+Object.setPrototypeOf(AppError, Error)
+AppError.prototype = Object.create(Error.prototype)
+AppError.prototype.name = "AppError"
+AppError.prototype.message = ""
+AppError.prototype.constructor = AppError
 
 new Vue({
   el: '#app',
@@ -13,63 +20,68 @@ new Vue({
     login: function() {
       let app = this
 
+      // Is MetaMask installed?
       if (typeof web3 === 'undefined') {
         app.errorMessage = 'Please install MetaMask'
         return
       }
 
-      eth = new Eth(web3.currentProvider)
+      web3 = new Web3(web3.currentProvider)
+      web3.extend({
+        property: 'app',
+        methods: [{
+          name: 'signTypedData',
+          call: 'eth_signTypedData',
+          params: 2,
+        }],
+      })
 
-      eth.accounts()
-        .then((accounts) => {
-          if (accounts.length <= 0) {
-            app.errorMessage = 'Please unlock MetaMask account'
-            throw app.errorMessage
+      let accounts = []
+
+      web3.eth.getAccounts()
+        .then((result) => {
+          // Are there available accounts?
+          if (result.length <= 0) {
+            throw new AppError('Please unlock MetaMask account')
           }
 
-          eth.net_version().then((netVersion) => {
-            if (netVersion !== '3') {
-              app.errorMessage = 'Please connect MetaMask to Ropsten Test Network'
-              throw app.errorMessage
-            }
+          accounts = result
 
-            // clean up error message
-            app.errorMessage = null
+          return web3.eth.net.getId()
+        })
+        .then((network) => {
+          // Does MetaMask connect to Ropeten?
+          if (network !== 3) {
+            throw new AppError('Please connect MetaMask to Ropsten Test Network')
+          }
 
-            const msgParams = [
-              {
-                type: 'string',
-                name: 'message',
-                value: 'Hi, Alice!',
-              },
-              {
-                type: 'uint32',
-                name: 'value',
-                value: 42,
-              },
-            ]
+          // Clean up error message
+          app.errorMessage = null
 
-            web3.currentProvider.sendAsync({
-              method: 'eth_signTypedData',
-              params: [msgParams, accounts[0]],
-              from: accounts[0],
-            }, (err, data) => {
-              if (err) throw err
-              if (data.error) {
-                if (data.error.code === -32603) {
-                  console.log('User denied message signature')
-                  return
-                }
-                else {
-                  throw data.error
-                }
-              }
-
-              let sig = data.result
-
-              console.log(sig) // TODO
-            })
-          })
+          return web3.app.signTypedData([
+            {
+              type: 'string',
+              name: 'message',
+              value: 'Hi, Alice!',
+            },
+            {
+              type: 'uint32',
+              name: 'value',
+              value: 42,
+            },
+          ], accounts[0])
+        })
+        .then((signature) => {
+          console.log(signature) // TODO
+        })
+        .catch((e) => {
+          if (e instanceof AppError) {
+            app.errorMessage = e.message
+          } else if (e.message.match(/User denied message signature\./)) {
+            app.errorMessage = 'User denied message signature'
+          } else {
+            throw e
+          }
         })
     },
   },
