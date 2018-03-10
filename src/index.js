@@ -45,7 +45,7 @@ let app = new Vue({
           }
 
           // Clean up error message
-          app.errorMessage = null
+          $this.errorMessage = null
 
           return web3.app.signTypedData([
             {
@@ -65,9 +65,9 @@ let app = new Vue({
         })
         .catch((e) => {
           if (e instanceof AppError) {
-            app.errorMessage = e.message
+            $this.errorMessage = e.message
           } else if (e.message.match(/User denied message signature\./)) {
-            app.errorMessage = 'Request is cancelled'
+            $this.errorMessage = 'Request is cancelled'
           } else {
             throw e
           }
