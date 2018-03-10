@@ -11,30 +11,19 @@ AppError.prototype.name = "AppError"
 AppError.prototype.message = ""
 AppError.prototype.constructor = AppError
 
-new Vue({
+let app = new Vue({
   el: '#app',
   data: {
+    isInitialized: false,
     errorMessage: null,
   },
   methods: {
     login: function() {
-      let app = this
+      let $this = this
 
-      // Is MetaMask installed?
-      if (typeof web3 === 'undefined') {
-        app.errorMessage = 'Please install MetaMask'
-        return
+      if (!$this.isInitialized) {
+        throw new AppError('Initializeation has not completed yet')
       }
-
-      web3 = new Web3(web3.currentProvider)
-      web3.extend({
-        property: 'app',
-        methods: [{
-          name: 'signTypedData',
-          call: 'eth_signTypedData',
-          params: 2,
-        }],
-      })
 
       let accounts = []
 
@@ -49,9 +38,9 @@ new Vue({
 
           return web3.eth.net.getId()
         })
-        .then((network) => {
+        .then((result) => {
           // Does MetaMask connect to Ropeten?
-          if (network !== 3) {
+          if (result !== 3) {
             throw new AppError('Please connect MetaMask to Ropsten Test Network')
           }
 
@@ -69,20 +58,39 @@ new Vue({
               name: 'value',
               value: 42,
             },
-          ], accounts[0])
+          ], accounts[0]) // TODO
         })
-        .then((signature) => {
-          console.log(signature) // TODO
+        .then((result) => {
+          console.log(result) // TODO
         })
         .catch((e) => {
           if (e instanceof AppError) {
             app.errorMessage = e.message
           } else if (e.message.match(/User denied message signature\./)) {
-            app.errorMessage = 'User denied message signature'
+            app.errorMessage = 'Request is cancelled'
           } else {
             throw e
           }
         })
     },
   },
+})
+
+window.addEventListener('load', () => {
+  // Is MetaMask installed?
+  if (typeof web3 === 'undefined') {
+    app.errorMessage = 'Please install MetaMask'
+  }
+
+  window.web3 = new Web3(web3.currentProvider)
+  window.web3.extend({
+    property: 'app',
+    methods: [{
+      name: 'signTypedData',
+      call: 'eth_signTypedData',
+      params: 2,
+    }],
+  })
+
+  app.isInitialized = true
 })
