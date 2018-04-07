@@ -54,9 +54,11 @@ let app = new Vue({
         .catch((e) => {
           if (e instanceof AppError) {
             $this.warn(e.message)
-          } else if (e.message.match(/User denied message signature\./)) {
+          }
+          else if (e.message.match(/User denied message signature\./)) {
             $this.warn('Please accept the signature request')
-          } else {
+          }
+          else {
             throw e
           }
         })
