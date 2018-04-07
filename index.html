@@ -3,19 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="./index.css" rel="stylesheet">
     <title>metamask-login-sample</title>
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/static/css/style.css">
   </head>
-  <body class="text-center">
+  <body>
     <div id="app">
-      <div>
-        <template v-if="errorMessage != null">
-          <div class="alert alert-warning" role="alert">{{ errorMessage }}</div>
-        </template>
-        <button type="button" class="btn btn-primary" v-on:click="login">Login with MetaMask</button>
-      </div>
+      <el-container>
+        <el-main>
+          <el-button type="primary" v-bind:disabled="isLoginButtonDisabled" @click="login">Login with MetaMask</el-button>
+        </el-main>
+      </el-container>
     </div>
-    <script src="./src/index.js" charset="utf-8"></script>
   </body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="/static/js/web3.min.js"></script>
+  <script src="/static/js/app.js"></script>
 </html>

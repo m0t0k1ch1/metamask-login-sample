@@ -1,7 +1,3 @@
-import 'babel-polyfill'
-import Vue from 'vue/dist/vue.esm.js'
-import Web3 from 'web3'
-
 function AppError(message) {
   this.message = message
 }
@@ -14,16 +10,11 @@ AppError.prototype.constructor = AppError
 let app = new Vue({
   el: '#app',
   data: {
-    isInitialized: false,
-    errorMessage: null,
+    isLoginButtonDisabled: true,
   },
   methods: {
     login: function() {
       let $this = this
-
-      if (!$this.isInitialized) {
-        throw new AppError('Initialization has not completed yet')
-      }
 
       let accounts = []
 
@@ -44,9 +35,6 @@ let app = new Vue({
             throw new AppError('Please connect MetaMask to Ropsten Test Network')
           }
 
-          // Clean up error message
-          $this.errorMessage = null
-
           return web3.app.signTypedData([
             {
               type: 'string',
@@ -61,17 +49,24 @@ let app = new Vue({
           ], accounts[0]) // TODO
         })
         .then((result) => {
-          console.log(result) // TODO
+          $this.$message(result) // TODO
         })
         .catch((e) => {
           if (e instanceof AppError) {
-            $this.errorMessage = e.message
+            $this.warn(e.message)
           } else if (e.message.match(/User denied message signature\./)) {
-            $this.errorMessage = 'Request is cancelled'
+            $this.warn('Please accept the signature request')
           } else {
             throw e
           }
         })
+    },
+    warn: function(message) {
+      this.$message({
+        showClose: true,
+        message: message,
+        type: 'warning',
+      })
     },
   },
 })
@@ -79,7 +74,8 @@ let app = new Vue({
 window.addEventListener('load', () => {
   // Is MetaMask installed?
   if (typeof web3 === 'undefined') {
-    app.errorMessage = 'Please install MetaMask'
+    app.warn('Please install MetaMask')
+    return
   }
 
   window.web3 = new Web3(web3.currentProvider)
@@ -92,5 +88,5 @@ window.addEventListener('load', () => {
     }],
   })
 
-  app.isInitialized = true
+  app.isLoginButtonDisabled = false
 })
