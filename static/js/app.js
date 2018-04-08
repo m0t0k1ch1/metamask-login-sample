@@ -35,18 +35,21 @@ let app = new Vue({
             throw new AppError('Please connect MetaMask to Ropsten Test Network')
           }
 
-          return web3.app.signTypedData([
-            {
-              type: 'string',
-              name: 'message',
-              value: 'Hi, Alice!',
-            },
-            {
-              type: 'uint32',
-              name: 'value',
-              value: 42,
-            },
-          ], accounts[0]) // TODO
+          return axios.get('/challenge')
+        })
+        .then((result) => {
+          let data = result.data
+          if (data.state === "error") {
+            throw new AppError(data.result.message)
+          }
+
+          let typedData = [{
+            type: 'string',
+            name: 'message',
+            value: data.result.challenge,
+          }]
+
+          return web3.app.signTypedData(typedData, accounts[0])
         })
         .then((result) => {
           $this.$message(result) // TODO
