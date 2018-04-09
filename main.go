@@ -19,7 +19,7 @@ func main() {
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
-// GET /challenge
+// POST /challenge
 func challengeHandler(c echo.Context) error {
 	address := c.FormValue("address")
 	// TODO: validate address format
