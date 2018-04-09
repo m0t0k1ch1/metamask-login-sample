@@ -35,7 +35,10 @@ let app = new Vue({
             throw new AppError('Please connect MetaMask to Ropsten Test Network')
           }
 
-          return axios.get('/challenge')
+          let params = new URLSearchParams();
+          params.append('address', accounts[0]);
+
+          return axios.post('/challenge', params)
         })
         .then((result) => {
           let data = result.data

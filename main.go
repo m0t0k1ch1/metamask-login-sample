@@ -14,15 +14,18 @@ func main() {
 	e.File("/", "index.html")
 	e.Static("/static", "static")
 
-	e.GET("/challenge", getChallenge)
+	e.POST("/challenge", getChallenge)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
 // GET /challenge
 func getChallenge(c echo.Context) error {
-	// TODO
-	challenge := "poyon"
+	address := c.FormValue("address")
+	// TODO: validate address format
+
+	// TODO: generate & save one-time token
+	challenge := address
 
 	return helpers.JSONResponseSuccess(c, map[string]string{
 		"challenge": challenge,
