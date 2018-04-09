@@ -3,7 +3,7 @@ new Vue({
   data: {
     isLoginButtonDisabled: true,
   },
-  created: function () {
+  created: function() {
     // Is MetaMask installed?
     if (typeof web3 === 'undefined') {
       this.warn('Please install MetaMask')
