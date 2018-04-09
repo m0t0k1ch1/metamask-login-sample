@@ -35,8 +35,8 @@ let app = new Vue({
             throw new AppError('Please connect MetaMask to Ropsten Test Network')
           }
 
-          let params = new URLSearchParams();
-          params.append('address', accounts[0]);
+          let params = new URLSearchParams()
+          params.append('address', accounts[0])
 
           return axios.post('/challenge', params)
         })
@@ -55,7 +55,14 @@ let app = new Vue({
           return web3.app.signTypedData(typedData, accounts[0])
         })
         .then((result) => {
-          $this.$message(result) // TODO
+          let params = new URLSearchParams()
+          params.append('address', accounts[0])
+          params.append('signature', result)
+
+          return axios.post('/login', params)
+        })
+        .then((result) => {
+          console.log(result)
         })
         .catch((e) => {
           if (e instanceof AppError) {
