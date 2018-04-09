@@ -12,6 +12,25 @@ let app = new Vue({
   data: {
     isLoginButtonDisabled: true,
   },
+  created: function () {
+    // Is MetaMask installed?
+    if (typeof web3 === 'undefined') {
+      this.warn('Please install MetaMask')
+      return
+    }
+
+    window.web3 = new Web3(web3.currentProvider)
+    window.web3.extend({
+      property: 'app',
+      methods: [{
+        name: 'signTypedData',
+        call: 'eth_signTypedData',
+        params: 2,
+      }],
+    })
+
+    this.isLoginButtonDisabled = false
+  },
   methods: {
     login: function() {
       let $this = this
@@ -84,24 +103,4 @@ let app = new Vue({
       })
     },
   },
-})
-
-window.addEventListener('load', () => {
-  // Is MetaMask installed?
-  if (typeof web3 === 'undefined') {
-    app.warn('Please install MetaMask')
-    return
-  }
-
-  window.web3 = new Web3(web3.currentProvider)
-  window.web3.extend({
-    property: 'app',
-    methods: [{
-      name: 'signTypedData',
-      call: 'eth_signTypedData',
-      params: 2,
-    }],
-  })
-
-  app.isLoginButtonDisabled = false
 })
