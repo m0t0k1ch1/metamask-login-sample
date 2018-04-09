@@ -14,13 +14,13 @@ func main() {
 	e.File("/", "index.html")
 	e.Static("/static", "static")
 
-	e.POST("/challenge", getChallenge)
+	e.POST("/challenge", challengeHandler)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
 // GET /challenge
-func getChallenge(c echo.Context) error {
+func challengeHandler(c echo.Context) error {
 	address := c.FormValue("address")
 	// TODO: validate address format
 
