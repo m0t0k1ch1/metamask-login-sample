@@ -23,16 +23,20 @@ func (app *AuthApplication) Challenge(addressHex string) (string, error) {
 		return "", err
 	}
 
-	// TODO: if user exists
+	user, err := app.getUser(address)
+	switch err {
+	case nil:
+		user.UpdateChallenge()
+	case model.ErrUserNotFound:
+		user, err = app.createUser(address)
+		if err != nil {
+			return "", err
+		}
+	default:
+		return "", err
+	}
 
-	// TODO
-	// user, err := app.createUser(address)
-	// if err != nil {
-	// 	return "", err
-	// }
-
-	// return user.Challenge, nil
-	return address.Hex(), nil
+	return user.Challenge, nil
 }
 
 func (app *AuthApplication) Login(addressHex, sigHex string) (string, error) {
@@ -43,15 +47,13 @@ func (app *AuthApplication) Login(addressHex, sigHex string) (string, error) {
 
 	// TODO: validate signature format
 
-	// TODO:
-	// user, err := app.getUser(address)
-	// if err != nil {
-	// 	return "", err
-	// }
+	user, err := app.getUser(address)
+	if err != nil {
+		return "", err
+	}
 
-	// data := model.NewMyTypedData(user.Challenge)
-	data := model.NewMyTypedData(address.Hex())
-
+	// TODO: refactoring
+	data := model.NewMyTypedData(user.Challenge)
 	pubkey, err := crypto.RecoverTypedSignature(
 		data.SignatureHashBytes(),
 		common.FromHex(sigHex),

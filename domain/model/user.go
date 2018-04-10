@@ -14,5 +14,11 @@ func NewUser(address common.Address) *User {
 	}
 }
 
-// TODO
-func (u *User) UpdateChallenge() {}
+func (u *User) AddressHex() string {
+	return u.Address.Hex()
+}
+
+func (u *User) UpdateChallenge() {
+	// TODO: generate new challenge
+	u.Challenge = u.AddressHex()
+}

@@ -7,6 +7,12 @@ import (
 
 var (
 	ErrInvalidSignature = NewError(http.StatusBadRequest, "Invalid signature")
+	ErrInvalidAddress   = NewError(http.StatusBadRequest, "Invalid address")
+
+	ErrUserNotFound = NewError(http.StatusNotFound, "User not found")
+
+	ErrUserAlreadyExists = NewError(http.StatusInternalServerError, "User already exists")
+	ErrUserBroken        = NewError(http.StatusInternalServerError, "User broken")
 )
 
 type Error struct {
