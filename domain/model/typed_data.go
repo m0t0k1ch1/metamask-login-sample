@@ -1,8 +1,6 @@
-package helpers
+package model
 
 import (
-	"crypto/ecdsa"
-
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
@@ -30,15 +28,4 @@ func (data MyTypedData) SignatureHashBytes() []byte {
 		crypto.Keccak256([]byte(data.Type+" "+data.Name)),
 		crypto.Keccak256([]byte(data.Value)),
 	)
-}
-
-func RecoverTypedSignature(hashBytes, sigBytes []byte) (*ecdsa.PublicKey, error) {
-	switch sigBytes[64] {
-	case 27:
-		sigBytes[64] = 0
-	case 28:
-		sigBytes[64] = 1
-	}
-
-	return crypto.SigToPub(hashBytes, sigBytes)
 }
