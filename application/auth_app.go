@@ -3,15 +3,15 @@ package application
 import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/model"
-	repo "github.com/m0t0k1ch1/metamask-login-sample/domain/repository"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/repository"
 	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/crypto"
 )
 
 type AuthApplication struct {
-	userRepo repo.UserRepository
+	userRepo repository.UserRepository
 }
 
-func NewAuthApplication(repo repo.UserRepository) *AuthApplication {
+func NewAuthApplication(repo repository.UserRepository) *AuthApplication {
 	return &AuthApplication{
 		userRepo: repo,
 	}

@@ -3,14 +3,14 @@ package handler
 import (
 	"github.com/labstack/echo"
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	repo "github.com/m0t0k1ch1/metamask-login-sample/domain/repository"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/repository"
 )
 
 type AuthAPI struct {
-	userRepo repo.UserRepository
+	userRepo repository.UserRepository
 }
 
-func NewAuthAPI(repo repo.UserRepository) *AuthAPI {
+func NewAuthAPI(repo repository.UserRepository) *AuthAPI {
 	return &AuthAPI{
 		userRepo: repo,
 	}
