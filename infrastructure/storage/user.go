@@ -2,7 +2,7 @@ package storage
 
 import (
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/model"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/library/kvs"
 )
 
@@ -12,36 +12,36 @@ func NewUserStorage() *UserStorage {
 	return &UserStorage{}
 }
 
-func (storage *UserStorage) Add(u *model.User) error {
-	if _, ok := kvs.Get(u.AddressHex()); ok {
-		return model.ErrUserAlreadyExists
+func (storage *UserStorage) Add(user *domain.User) error {
+	if _, ok := kvs.Get(user.AddressHex()); ok {
+		return domain.ErrUserAlreadyExists
 	}
 
-	kvs.Set(u.AddressHex(), u)
+	kvs.Set(user.AddressHex(), user)
 
 	return nil
 }
 
-func (storage *UserStorage) Get(address common.Address) (*model.User, error) {
+func (storage *UserStorage) Get(address common.Address) (*domain.User, error) {
 	data, ok := kvs.Get(address.Hex())
 	if !ok {
-		return nil, model.ErrUserNotFound
+		return nil, domain.ErrUserNotFound
 	}
 
-	u, ok := data.(*model.User)
+	user, ok := data.(*domain.User)
 	if !ok {
-		return nil, model.ErrUserBroken
+		return nil, domain.ErrUserBroken
 	}
 
-	return u, nil
+	return user, nil
 }
 
-func (storage *UserStorage) Update(u *model.User) error {
-	if _, ok := kvs.Get(u.AddressHex()); !ok {
-		return model.ErrUserNotFound
+func (storage *UserStorage) Update(user *domain.User) error {
+	if _, ok := kvs.Get(user.AddressHex()); !ok {
+		return domain.ErrUserNotFound
 	}
 
-	kvs.Set(u.AddressHex(), u)
+	kvs.Set(user.AddressHex(), user)
 
 	return nil
 }

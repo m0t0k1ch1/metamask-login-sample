@@ -1,0 +1,37 @@
+package domain
+
+import (
+	"fmt"
+)
+
+var (
+	ErrCodeUnexpected = 1000
+
+	ErrInvalidAddressFormat   = NewError(2001, "Invalid address format")
+	ErrInvalidSignatureFormat = NewError(2002, "Invalid signature format")
+	ErrInvalidSignature       = NewError(2003, "Invalid signature")
+
+	ErrUserNotFound      = NewError(3001, "User not found")
+	ErrUserAlreadyExists = NewError(3002, "User already exists")
+	ErrUserBroken        = NewError(3003, "User broken")
+)
+
+type Error struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
+func (err *Error) Error() string {
+	return fmt.Sprintf("%s [%d]", err.Message, err.Code)
+}
+
+func NewUnexpectedError(message string) *Error {
+	return NewError(ErrCodeUnexpected, message)
+}
+
+func NewError(code int, message string) *Error {
+	return &Error{
+		Code:    code,
+		Message: message,
+	}
+}

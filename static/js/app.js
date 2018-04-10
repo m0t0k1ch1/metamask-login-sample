@@ -69,7 +69,7 @@ new Vue({
           params.append('address', accounts[0])
           params.append('signature', result)
 
-          return axios.post('/login', params)
+          return axios.post('/authorize', params)
         })
         .then((result) => {
           console.log(result)
