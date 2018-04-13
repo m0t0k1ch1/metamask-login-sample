@@ -25,13 +25,13 @@ func (err *Error) Error() string {
 	return fmt.Sprintf("%s [%d]", err.Message, err.Code)
 }
 
-func NewUnexpectedError() *Error {
-	return NewError(ErrCodeUnexpected, "Internal server error")
-}
-
 func NewError(code int, message string) *Error {
 	return &Error{
 		Code:    code,
 		Message: message,
 	}
+}
+
+func NewUnexpectedError() *Error {
+	return NewError(ErrCodeUnexpected, "Internal server error")
 }

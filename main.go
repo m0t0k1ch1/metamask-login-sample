@@ -1,32 +1,18 @@
 package main
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	"github.com/m0t0k1ch1/metamask-login-sample/handler"
-	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/storage"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
+	dbUser "github.com/m0t0k1ch1/metamask-login-sample/infrastructure/db/user"
+	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/handler/auth"
 )
 
 const (
 	DefaultServerPort = "1323"
 )
-
-func main() {
-	e := echo.New()
-
-	e.Use(middleware.Logger())
-
-	e.File("/", "index.html")
-	e.Static("/static", "static")
-
-	setUpHandlers(e.Router())
-
-	e.Logger.Fatal(e.Start(":" + getPort()))
-}
 
 func getPort() string {
 	port := os.Getenv("MLS_SERVER_PORT")
@@ -37,12 +23,22 @@ func getPort() string {
 	return port
 }
 
-func setUpHandlers(router *echo.Router) {
-	userStorage := storage.NewUserStorage()
+func injectDependencies() {
+	user.NewRepository = dbUser.NewRepository
+}
 
-	authApp := application.NewAuthApplication(userStorage)
-	authController := handler.NewAuthController(authApp)
+func main() {
+	injectDependencies()
 
-	router.Add(http.MethodPost, "/challenge", authController.ChallengeHandler)
-	router.Add(http.MethodPost, "/authorize", authController.AuthorizeHandler)
+	e := echo.New()
+
+	e.Use(middleware.Logger())
+
+	e.File("/", "index.html")
+	e.Static("/static", "static")
+
+	e.POST("/challenge", auth.ChallengeHandler)
+	e.POST("/authorize", auth.AuthorizeHandler)
+
+	e.Logger.Fatal(e.Start(":" + getPort()))
 }

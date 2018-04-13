@@ -10,9 +10,9 @@ const (
 )
 
 type MyTypedData struct {
-	Type  string `json:"type"`
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Type  string
+	Name  string
+	Value string
 }
 
 func NewMyTypedData(value string) *MyTypedData {

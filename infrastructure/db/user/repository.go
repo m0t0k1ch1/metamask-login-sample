@@ -1,18 +1,20 @@
-package storage
+package user
 
 import (
-	"github.com/ethereum/go-ethereum/common"
+	"context"
+
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/library/kvs"
 )
 
-type UserStorage struct{}
+type repository struct{}
 
-func NewUserStorage() *UserStorage {
-	return &UserStorage{}
+func NewRepository() user.Repository {
+	return &repository{}
 }
 
-func (storage *UserStorage) Add(user *domain.User) error {
+func (repo *repository) Add(ctx context.Context, user *domain.User) error {
 	if _, ok := kvs.Get(user.AddressHex()); ok {
 		return domain.ErrUserAlreadyExists
 	}
@@ -22,7 +24,7 @@ func (storage *UserStorage) Add(user *domain.User) error {
 	return nil
 }
 
-func (storage *UserStorage) Get(address common.Address) (*domain.User, error) {
+func (repo *repository) Get(ctx context.Context, address domain.Address) (*domain.User, error) {
 	data, ok := kvs.Get(address.Hex())
 	if !ok {
 		return nil, domain.ErrUserNotFound
@@ -36,7 +38,7 @@ func (storage *UserStorage) Get(address common.Address) (*domain.User, error) {
 	return user, nil
 }
 
-func (storage *UserStorage) Update(user *domain.User) error {
+func (repo *repository) Update(ctx context.Context, user *domain.User) error {
 	if _, ok := kvs.Get(user.AddressHex()); !ok {
 		return domain.ErrUserNotFound
 	}
@@ -46,7 +48,7 @@ func (storage *UserStorage) Update(user *domain.User) error {
 	return nil
 }
 
-func (storage *UserStorage) Delete(user *domain.User) error {
+func (repo *repository) Delete(ctx context.Context, user *domain.User) error {
 	if _, ok := kvs.Delete(user.AddressHex()); !ok {
 		return domain.ErrUserNotFound
 	}

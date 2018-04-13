@@ -16,12 +16,5 @@ func PubkeyToAddressHex(pubkey *ecdsa.PublicKey) string {
 }
 
 func RecoverTypedSignature(hashBytes, sigBytes []byte) (*ecdsa.PublicKey, error) {
-	switch sigBytes[64] {
-	case 27:
-		sigBytes[64] = 0
-	case 28:
-		sigBytes[64] = 1
-	}
-
 	return crypto.SigToPub(hashBytes, sigBytes)
 }

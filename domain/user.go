@@ -1,24 +1,33 @@
 package domain
 
-import "github.com/ethereum/go-ethereum/common"
+import (
+	"github.com/m0t0k1ch1/metamask-login-sample/library/strutil"
+)
+
+const (
+	TokenLength = 32
+)
 
 type User struct {
-	Name      string
-	Address   common.Address
-	Challenge string
+	Name    string
+	Address Address
+	token   string
 }
 
-func NewUser(address common.Address) *User {
+func NewUser(address Address) *User {
 	return &User{
 		Address: address,
 	}
+}
+
+func (u *User) Token() string {
+	return u.token
 }
 
 func (u *User) AddressHex() string {
 	return u.Address.Hex()
 }
 
-func (u *User) UpdateChallenge() {
-	// TODO: generate new challenge
-	u.Challenge = u.AddressHex()
+func (u *User) UpdateToken() {
+	u.token = strutil.Rand(TokenLength)
 }
