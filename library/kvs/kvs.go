@@ -21,3 +21,12 @@ func Get(key string) (value interface{}, ok bool) {
 	value, ok = store[key]
 	return
 }
+
+func Delete(key string) (value interface{}, ok bool) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	value, ok = store[key]
+	delete(store, key)
+	return
+}
