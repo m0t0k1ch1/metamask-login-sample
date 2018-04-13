@@ -6,7 +6,7 @@ import (
 
 const (
 	MyTypedDataType = "string"
-	MyTypedDataName = "message"
+	MyTypedDataName = "challenge"
 )
 
 type MyTypedData struct {

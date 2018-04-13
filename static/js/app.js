@@ -58,7 +58,7 @@ new Vue({
 
           let typedData = [{
             type: 'string',
-            name: 'message',
+            name: 'challenge',
             value: data.result.challenge,
           }]
 
