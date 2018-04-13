@@ -20,14 +20,14 @@ func NewUser(address Address) *User {
 	}
 }
 
-func (u *User) Token() string {
-	return u.token
+func (user *User) Token() string {
+	return user.token
 }
 
-func (u *User) AddressHex() string {
-	return u.Address.Hex()
+func (user *User) UpdateToken() {
+	user.token = strutil.Rand(TokenLength)
 }
 
-func (u *User) UpdateToken() {
-	u.token = strutil.Rand(TokenLength)
+func (user *User) AuthTypedData() *AuthTypedData {
+	return NewAuthTypedData(user.Token())
 }

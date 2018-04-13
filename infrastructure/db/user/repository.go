@@ -15,11 +15,11 @@ func NewRepository() user.Repository {
 }
 
 func (repo *repository) Add(ctx context.Context, user *domain.User) error {
-	if _, ok := kvs.Get(user.AddressHex()); ok {
+	if _, ok := kvs.Get(user.Address.Hex()); ok {
 		return domain.ErrUserAlreadyExists
 	}
 
-	kvs.Set(user.AddressHex(), user)
+	kvs.Set(user.Address.Hex(), user)
 
 	return nil
 }
@@ -39,17 +39,17 @@ func (repo *repository) Get(ctx context.Context, address domain.Address) (*domai
 }
 
 func (repo *repository) Update(ctx context.Context, user *domain.User) error {
-	if _, ok := kvs.Get(user.AddressHex()); !ok {
+	if _, ok := kvs.Get(user.Address.Hex()); !ok {
 		return domain.ErrUserNotFound
 	}
 
-	kvs.Set(user.AddressHex(), user)
+	kvs.Set(user.Address.Hex(), user)
 
 	return nil
 }
 
 func (repo *repository) Delete(ctx context.Context, user *domain.User) error {
-	if _, ok := kvs.Delete(user.AddressHex()); !ok {
+	if _, ok := kvs.Delete(user.Address.Hex()); !ok {
 		return domain.ErrUserNotFound
 	}
 

@@ -5,7 +5,6 @@ import (
 
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
-	"github.com/m0t0k1ch1/metamask-login-sample/library/crypto"
 )
 
 type Application struct {
@@ -56,13 +55,11 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 		return nil, err
 	}
 
-	// TODO: refactoring
-	hashBytes := domain.NewAuthTypedData(user.Token()).SignatureHashBytes()
-	pubkey, err := crypto.RecoverTypedSignature(hashBytes, sig.Bytes())
+	pubkey, err := user.AuthTypedData().RecoverPubkey(sig)
 	if err != nil {
 		return nil, err
 	}
-	if crypto.PubkeyToAddressHex(pubkey) != address.Hex() {
+	if pubkey.Address().Hex() != address.Hex() {
 		return nil, domain.ErrInvalidSignature
 	}
 
