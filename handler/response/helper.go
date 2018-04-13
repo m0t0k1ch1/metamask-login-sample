@@ -16,7 +16,8 @@ func JSONError(c echo.Context, err error) error {
 	if domainErr, ok := err.(*domain.Error); ok {
 		result = domainErr
 	} else {
-		result = domain.NewUnexpectedError(err.Error())
+		c.Logger().Error(err)
+		result = domain.NewUnexpectedError()
 	}
 
 	return c.JSON(http.StatusOK, newErrorResponse(result))

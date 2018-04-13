@@ -25,8 +25,8 @@ func (err *Error) Error() string {
 	return fmt.Sprintf("%s [%d]", err.Message, err.Code)
 }
 
-func NewUnexpectedError(message string) *Error {
-	return NewError(ErrCodeUnexpected, message)
+func NewUnexpectedError() *Error {
+	return NewError(ErrCodeUnexpected, "Internal server error")
 }
 
 func NewError(code int, message string) *Error {
