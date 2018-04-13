@@ -57,7 +57,7 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 	}
 
 	// TODO: refactoring
-	hashBytes := domain.NewMyTypedData(user.Token()).SignatureHashBytes()
+	hashBytes := domain.NewAuthTypedData(user.Token()).SignatureHashBytes()
 	pubkey, err := crypto.RecoverTypedSignature(hashBytes, sig.Bytes())
 	if err != nil {
 		return nil, err

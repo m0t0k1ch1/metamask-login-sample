@@ -5,25 +5,25 @@ import (
 )
 
 const (
-	MyTypedDataType = "string"
-	MyTypedDataName = "challenge"
+	AuthTypedDataType = "string"
+	AuthTypedDataName = "challenge"
 )
 
-type MyTypedData struct {
+type AuthTypedData struct {
 	Type  string
 	Name  string
 	Value string
 }
 
-func NewMyTypedData(value string) *MyTypedData {
-	return &MyTypedData{
-		Type:  MyTypedDataType,
-		Name:  MyTypedDataName,
+func NewAuthTypedData(value string) *AuthTypedData {
+	return &AuthTypedData{
+		Type:  AuthTypedDataType,
+		Name:  AuthTypedDataName,
 		Value: value,
 	}
 }
 
-func (data MyTypedData) SignatureHashBytes() []byte {
+func (data AuthTypedData) SignatureHashBytes() []byte {
 	return crypto.Keccak256(
 		crypto.Keccak256([]byte(data.Type+" "+data.Name)),
 		crypto.Keccak256([]byte(data.Value)),
