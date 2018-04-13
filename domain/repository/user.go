@@ -9,4 +9,5 @@ type UserRepository interface {
 	Add(user *domain.User) error
 	Get(address common.Address) (*domain.User, error)
 	Update(user *domain.User) error
+	Delete(user *domain.User) error
 }
