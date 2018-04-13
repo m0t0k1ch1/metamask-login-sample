@@ -45,3 +45,11 @@ func (storage *UserStorage) Update(user *domain.User) error {
 
 	return nil
 }
+
+func (storage *UserStorage) Delete(user *domain.User) error {
+	if _, ok := kvs.Delete(user.AddressHex()); !ok {
+		return domain.ErrUserNotFound
+	}
+
+	return nil
+}
