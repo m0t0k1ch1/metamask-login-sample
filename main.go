@@ -3,25 +3,16 @@ package main
 import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	appAuth "github.com/m0t0k1ch1/metamask-login-sample/application/auth"
+	"github.com/m0t0k1ch1/metamask-login-sample/application/auth"
 	"github.com/m0t0k1ch1/metamask-login-sample/config"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 	dbUser "github.com/m0t0k1ch1/metamask-login-sample/infrastructure/db/user"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/handler/auth"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/handler/users"
+	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/handler"
 )
 
 func injectDependencies(conf *config.Config) {
-	appAuth.Secret = func() string { return conf.Secret }
+	auth.Secret = func() string { return conf.Secret }
 	user.NewRepository = dbUser.NewRepository
-}
-
-func newAuthenticator(conf *config.Config) echo.MiddlewareFunc {
-	return middleware.JWTWithConfig(middleware.JWTConfig{
-		Claims:     &domain.AuthClaims{},
-		SigningKey: []byte(conf.Secret),
-	})
 }
 
 func main() {
@@ -34,12 +25,7 @@ func main() {
 	e.File("/", conf.Server.IndexFilePath)
 	e.Static("/static", conf.Server.StaticDirPath)
 
-	e.POST("/challenge", auth.ChallengeHandler)
-	e.POST("/authorize", auth.AuthorizeHandler)
-
-	apiGroup := e.Group("/api")
-	apiGroup.Use(newAuthenticator(conf))
-	apiGroup.GET("/users/:address", users.GetHandler)
+	handler.SetUp(e, conf)
 
 	e.Logger.Fatal(e.Start(":" + conf.Server.Port))
 }
