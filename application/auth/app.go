@@ -8,6 +8,8 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 )
 
+var Secret func() string
+
 type Application struct {
 	secret   string
 	userRepo user.Repository
@@ -15,7 +17,7 @@ type Application struct {
 
 func NewApplication() *Application {
 	return &Application{
-		secret:   domain.Secret(),
+		secret:   Secret(),
 		userRepo: user.NewRepository(),
 	}
 }

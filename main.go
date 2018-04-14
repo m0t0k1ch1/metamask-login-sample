@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	appAuth "github.com/m0t0k1ch1/metamask-login-sample/application/auth"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 	dbUser "github.com/m0t0k1ch1/metamask-login-sample/infrastructure/db/user"
@@ -40,7 +41,7 @@ func newConfig() *config {
 }
 
 func injectDependencies(config *config) {
-	domain.Secret = func() string {
+	appAuth.Secret = func() string {
 		return config.secret
 	}
 
