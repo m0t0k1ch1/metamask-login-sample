@@ -1,12 +1,14 @@
 package auth
 
+import "github.com/m0t0k1ch1/metamask-login-sample/domain/auth"
+
 type ChallengeOutput struct {
 	Challenge string `json:"challenge"`
 }
 
-func NewChallengeOutput(challenge string) *ChallengeOutput {
+func NewChallengeOutput(challenge *auth.Challenge) *ChallengeOutput {
 	return &ChallengeOutput{
-		Challenge: challenge,
+		Challenge: challenge.Value,
 	}
 }
 

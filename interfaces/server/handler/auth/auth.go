@@ -9,7 +9,7 @@ import (
 func ChallengeHandler(c *handler.Context) error {
 	addressHex := c.FormValue("address")
 
-	app := auth.NewApplication(c.Config.App, c.Container)
+	app := auth.NewApplication(c.Core)
 
 	ctx := c.Request().Context()
 	in := auth.NewChallengeInput(addressHex)
@@ -26,7 +26,7 @@ func AuthorizeHandler(c *handler.Context) error {
 	addressHex := c.FormValue("address")
 	sigHex := c.FormValue("signature")
 
-	app := auth.NewApplication(c.Config.App, c.Container)
+	app := auth.NewApplication(c.Core)
 
 	ctx := c.Request().Context()
 	in := auth.NewAuthorizeInput(addressHex, sigHex)

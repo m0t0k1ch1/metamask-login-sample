@@ -3,21 +3,24 @@ package auth
 import (
 	"context"
 
-	"github.com/m0t0k1ch1/metamask-login-sample/config"
+	"github.com/m0t0k1ch1/metamask-login-sample/application"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/model"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/repository"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/auth"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 )
 
 type Application struct {
-	secret   string
-	userRepo repository.User
+	*application.Base
+	userRepo user.Repository
 }
 
-func NewApplication(conf *config.AppConfig, container *domain.Container) *Application {
+func NewApplication(core *application.Core) *Application {
+	base := application.NewBase(core)
+
 	return &Application{
-		secret:   conf.Secret,
-		userRepo: container.NewUserRepository(),
+		Base:     base,
+		userRepo: base.Container().NewUserRepository(),
 	}
 }
 
@@ -59,7 +62,7 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 		return nil, err
 	}
 
-	pubkey, err := user.AuthData().RecoverPubkey(sig)
+	pubkey, err := user.Challenge().RecoverPubkey(sig)
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +80,8 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 	return out, nil
 }
 
-func (app *Application) createUser(ctx context.Context, address model.Address) (*model.User, error) {
-	user := model.NewUser(address)
+func (app *Application) createUser(ctx context.Context, address common.Address) (*user.User, error) {
+	user := user.NewUser(address)
 	user.UpdateChallenge()
 
 	if err := app.userRepo.Add(ctx, user); err != nil {
@@ -88,10 +91,10 @@ func (app *Application) createUser(ctx context.Context, address model.Address) (
 	return user, nil
 }
 
-func (app *Application) getUser(ctx context.Context, address model.Address) (*model.User, error) {
+func (app *Application) getUser(ctx context.Context, address common.Address) (*user.User, error) {
 	return app.userRepo.Get(ctx, address)
 }
 
-func (app *Application) newSignedToken(address model.Address) (string, error) {
-	return model.NewAuthToken(address).SignedString(app.secret)
+func (app *Application) newSignedToken(address common.Address) (string, error) {
+	return auth.NewToken(address).SignedString(app.Config().Secret)
 }

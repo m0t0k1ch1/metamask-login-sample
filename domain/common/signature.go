@@ -1,7 +1,8 @@
-package model
+package common
 
 import (
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/m0t0k1ch1/metamask-login-sample/library/strutil"
 )
 
 const (
@@ -27,4 +28,12 @@ func NewSignatureFromHex(sigHex string) Signature {
 	}
 
 	return sig
+}
+
+func IsValidSignatureHex(sigHex string) bool {
+	if strutil.HasHexPrefix(sigHex) {
+		sigHex = sigHex[2:]
+	}
+
+	return len(sigHex) == 2*SignatureLength && strutil.IsHex(sigHex)
 }

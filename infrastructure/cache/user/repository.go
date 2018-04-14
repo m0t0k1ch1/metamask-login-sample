@@ -1,21 +1,21 @@
-package cache
+package user
 
 import (
 	"context"
 
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/model"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/repository"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/library/kvs"
 )
 
-type userRepository struct{}
+type repository struct{}
 
-func NewUserRepository() repository.User {
-	return &userRepository{}
+func NewRepository() user.Repository {
+	return &repository{}
 }
 
-func (repo *userRepository) Add(ctx context.Context, user *model.User) error {
+func (repo *repository) Add(ctx context.Context, user *user.User) error {
 	if _, ok := kvs.Get(user.Address.Hex()); ok {
 		return domain.ErrUserAlreadyExists
 	}
@@ -25,13 +25,13 @@ func (repo *userRepository) Add(ctx context.Context, user *model.User) error {
 	return nil
 }
 
-func (repo *userRepository) Get(ctx context.Context, address model.Address) (*model.User, error) {
+func (repo *repository) Get(ctx context.Context, address common.Address) (*user.User, error) {
 	data, ok := kvs.Get(address.Hex())
 	if !ok {
 		return nil, domain.ErrUserNotFound
 	}
 
-	user, ok := data.(*model.User)
+	user, ok := data.(*user.User)
 	if !ok {
 		return nil, domain.ErrUserBroken
 	}
@@ -39,7 +39,7 @@ func (repo *userRepository) Get(ctx context.Context, address model.Address) (*mo
 	return user, nil
 }
 
-func (repo *userRepository) Update(ctx context.Context, user *model.User) error {
+func (repo *repository) Update(ctx context.Context, user *user.User) error {
 	if _, ok := kvs.Get(user.Address.Hex()); !ok {
 		return domain.ErrUserNotFound
 	}
@@ -49,7 +49,7 @@ func (repo *userRepository) Update(ctx context.Context, user *model.User) error 
 	return nil
 }
 
-func (repo *userRepository) Delete(ctx context.Context, user *model.User) error {
+func (repo *repository) Delete(ctx context.Context, user *user.User) error {
 	if _, ok := kvs.Delete(user.Address.Hex()); !ok {
 		return domain.ErrUserNotFound
 	}

@@ -1,3 +1,3 @@
 package handler
 
-type Handler func(*Context) error
+type HandlerFunc func(*Context) error

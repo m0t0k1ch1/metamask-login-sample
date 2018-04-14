@@ -2,14 +2,9 @@ package config
 
 import (
 	"os"
-)
 
-const (
-	DefaultAppSecret = "secret"
-
-	DefaultServerPort          = "1323"
-	DefaultServerIndexFilePath = "index.html"
-	DefaultServerStaticDirPath = "static"
+	"github.com/m0t0k1ch1/metamask-login-sample/application"
+	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 )
 
 func getenv(key, defaultValue string) string {
@@ -21,38 +16,17 @@ func getenv(key, defaultValue string) string {
 	return s
 }
 
-type Config struct {
-	App    *AppConfig
-	Server *ServerConfig
-}
-
-func NewConfig() *Config {
-	return &Config{
-		App:    NewAppConfig(),
-		Server: NewServerConfig(),
+func NewServerConfig() *server.Config {
+	return &server.Config{
+		Port:          getenv("MLS_SERVER_PORT", server.DefaultPort),
+		IndexFilePath: getenv("MLS_SERVER_INDEX_FILE_PATH", server.DefaultIndexFilePath),
+		StaticDirPath: getenv("MLS_SERVER_STATIC_DIR_PATH", server.DefaultStaticDirPath),
+		App:           NewApplicationConfig(),
 	}
 }
 
-type AppConfig struct {
-	Secret string
-}
-
-func NewAppConfig() *AppConfig {
-	return &AppConfig{
-		Secret: getenv("MLS_APP_SECRET", DefaultAppSecret),
-	}
-}
-
-type ServerConfig struct {
-	Port          string
-	IndexFilePath string
-	StaticDirPath string
-}
-
-func NewServerConfig() *ServerConfig {
-	return &ServerConfig{
-		Port:          getenv("MLS_SERVER_PORT", DefaultServerPort),
-		IndexFilePath: getenv("MLS_SERVER_INDEX_FILE_PATH", DefaultServerIndexFilePath),
-		StaticDirPath: getenv("MLS_SERVER_STATIC_DIR_PATH", DefaultServerStaticDirPath),
+func NewApplicationConfig() *application.Config {
+	return &application.Config{
+		Secret: getenv("MLS_APP_SECRET", application.DefaultSecret),
 	}
 }

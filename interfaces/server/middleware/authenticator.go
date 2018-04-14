@@ -3,13 +3,12 @@ package middleware
 import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/m0t0k1ch1/metamask-login-sample/config"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/model"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/auth"
 )
 
-func NewAuthenticator(conf *config.Config) echo.MiddlewareFunc {
+func NewAuthenticator(secret string) echo.MiddlewareFunc {
 	return middleware.JWTWithConfig(middleware.JWTConfig{
-		Claims:     &model.AuthClaims{},
-		SigningKey: []byte(conf.App.Secret),
+		Claims:     &auth.Claims{},
+		SigningKey: []byte(secret),
 	})
 }
