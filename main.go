@@ -10,7 +10,7 @@ import (
 func main() {
 	conf := config.NewConfig()
 	container := &domain.Container{
-		NewUserRepository: cache.NewUser,
+		NewUserRepository: cache.NewUserRepository,
 	}
 
 	srv := server.New(conf, container)
