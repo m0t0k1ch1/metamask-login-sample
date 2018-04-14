@@ -11,9 +11,10 @@ func ChallengeHandler(c echo.Context) error {
 
 	app := auth.NewApplication()
 
+	ctx := c.Request().Context()
 	in := auth.NewChallengeInput(addressHex)
 
-	out, err := app.Challenge(c.Request().Context(), in)
+	out, err := app.Challenge(ctx, in)
 	if err != nil {
 		return response.JSONError(c, err)
 	}
@@ -27,9 +28,10 @@ func AuthorizeHandler(c echo.Context) error {
 
 	app := auth.NewApplication()
 
+	ctx := c.Request().Context()
 	in := auth.NewAuthorizeInput(addressHex, sigHex)
 
-	out, err := app.Authorize(c.Request().Context(), in)
+	out, err := app.Authorize(ctx, in)
 	if err != nil {
 		return response.JSONError(c, err)
 	}
