@@ -92,16 +92,8 @@ new Vue({
 
           client.defaults.headers.common['Authorization'] = 'Bearer ' + result.token
 
-          $this.getUser(accounts[0])
+          return client.get('/api/users/' + accounts[0])
         })
-        .catch((e) => {
-          $this.handleError(e)
-        })
-    },
-    getUser: function(address) {
-      let $this = this
-
-      client.get('/api/users/' + address)
         .then((response) => {
           let result = response.data.result
 
