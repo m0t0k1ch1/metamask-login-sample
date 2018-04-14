@@ -9,9 +9,9 @@ const (
 )
 
 type User struct {
-	Name    string
-	Address Address
-	token   string
+	Name      string
+	Address   Address
+	challenge string
 }
 
 func NewUser(address Address) *User {
@@ -20,14 +20,14 @@ func NewUser(address Address) *User {
 	}
 }
 
-func (user *User) Token() string {
-	return user.token
+func (user *User) Challenge() string {
+	return user.challenge
 }
 
-func (user *User) UpdateToken() {
-	user.token = strutil.Rand(UserTokenLength)
+func (user *User) UpdateChallenge() {
+	user.challenge = strutil.Rand(UserTokenLength)
 }
 
 func (user *User) AuthTypedData() *AuthTypedData {
-	return NewAuthTypedData(user.Token())
+	return NewAuthTypedData(user.Challenge())
 }

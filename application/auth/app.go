@@ -34,7 +34,7 @@ func (app *Application) Challenge(ctx context.Context, in *ChallengeInput) (*Cha
 	user, err := app.getUser(ctx, address)
 	switch err {
 	case nil:
-		user.UpdateToken()
+		user.UpdateChallenge()
 	case domain.ErrUserNotFound:
 		user, err = app.createUser(ctx, address)
 		if err != nil {
@@ -44,7 +44,7 @@ func (app *Application) Challenge(ctx context.Context, in *ChallengeInput) (*Cha
 		return nil, err
 	}
 
-	out := NewChallengeOutput(user.Token())
+	out := NewChallengeOutput(user.Challenge())
 
 	return out, nil
 }
@@ -82,7 +82,7 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 
 func (app *Application) createUser(ctx context.Context, address domain.Address) (*domain.User, error) {
 	user := domain.NewUser(address)
-	user.UpdateToken()
+	user.UpdateChallenge()
 
 	if err := app.userRepo.Add(ctx, user); err != nil {
 		return nil, err
