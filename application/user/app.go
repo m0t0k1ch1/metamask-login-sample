@@ -9,16 +9,14 @@ import (
 )
 
 type Application struct {
-	*application.Base
+	*application.Core
 	userRepo user.Repository
 }
 
 func NewApplication(core *application.Core) *Application {
-	base := application.NewBase(core)
-
 	return &Application{
-		Base:     base,
-		userRepo: base.Container().NewUserRepository(),
+		Core:     core,
+		userRepo: core.Container.NewUserRepository(),
 	}
 }
 
