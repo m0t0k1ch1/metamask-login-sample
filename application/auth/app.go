@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 )
@@ -94,7 +93,5 @@ func (app *Application) getUser(ctx context.Context, address domain.Address) (*d
 }
 
 func (app *Application) newSignedToken(address domain.Address) (string, error) {
-	return jwt.NewWithClaims(
-		jwt.SigningMethodHS256, domain.NewAuthClaims(address),
-	).SignedString([]byte(app.secret))
+	return domain.NewAuthToken(address).SignedString(app.secret)
 }
