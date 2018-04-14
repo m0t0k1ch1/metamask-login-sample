@@ -47,7 +47,7 @@ func (data *AuthTypedData) RecoverPubkey(sig Signature) (*Pubkey, error) {
 }
 
 type AuthClaims struct {
-	Address string `json:"address"`
+	AddressHex string `json:"address"`
 	jwt.StandardClaims
 }
 
@@ -55,7 +55,7 @@ func NewAuthClaims(address Address) *AuthClaims {
 	now := time.Now()
 
 	return &AuthClaims{
-		Address: address.Hex(),
+		AddressHex: address.Hex(),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: now.Add(AuthClaimsExpiryDuration).Unix(),
 			IssuedAt:  now.Unix(),
