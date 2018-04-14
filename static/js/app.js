@@ -1,9 +1,26 @@
+function AppError(message) {
+  this.message = message
+}
+Object.setPrototypeOf(AppError, Error)
+AppError.prototype = Object.create(Error.prototype)
+AppError.prototype.name = "AppError"
+AppError.prototype.message = ""
+AppError.prototype.constructor = AppError
+
+let client = axios.create()
+client.interceptors.response.use((response) => {
+  let data = response.data
+  if (data.state === "error") {
+    return Promise.reject(new AppError(data.result.message))
+  }
+  return response
+})
+
 new Vue({
   el: '#app',
   data: {
     isLoginButtonDisabled: true,
     user: null,
-    token: "",
   },
   created: function() {
     // Is MetaMask installed?
@@ -50,18 +67,15 @@ new Vue({
           let params = new URLSearchParams()
           params.append('address', accounts[0])
 
-          return axios.post('/challenge', params)
+          return client.post('/challenge', params)
         })
-        .then((result) => {
-          let data = result.data
-          if (data.state === "error") {
-            throw new AppError(data.result.message)
-          }
+        .then((response) => {
+          let result = response.data.result
 
           let typedData = [{
             type: 'string',
             name: 'challenge',
-            value: data.result.challenge,
+            value: response.data.result.challenge,
           }]
 
           return web3.app.signTypedData(typedData, accounts[0])
@@ -71,48 +85,46 @@ new Vue({
           params.append('address', accounts[0])
           params.append('signature', result)
 
-          return axios.post('/authorize', params)
+          return client.post('/authorize', params)
         })
-        .then((result) => {
-          let data = result.data
-          if (data.state === 'error') {
-            throw new AppError(data.result.message)
-          }
+        .then((response) => {
+          let result = response.data.result
 
-          $this.token = data.result.token
+          client.defaults.headers.common['Authorization'] = 'Bearer ' + result.token
 
-          return axios.get('/api/users/' + accounts[0], {
-            headers: {
-              'Authorization': 'Bearer ' + $this.token,
-            },
-          })
-        })
-        .then((result) => {
-          let data = result.data
-          if (data.state === 'error') {
-            throw new AppError(data.result.message)
-          }
-
-          $this.user = data.result
+          $this.getUser(accounts[0])
         })
         .catch((e) => {
-          if (e instanceof AppError) {
-            $this.warn(e.message)
-          }
-          else if (e.message.match(/User denied message signature\./)) {
-            $this.warn('Please accept the signature request')
-          }
-          else {
-            throw e
-          }
+          $this.handleError(e)
+        })
+    },
+    getUser: function(address) {
+      let $this = this
+
+      client.get('/api/users/' + address)
+        .then((response) => {
+          let result = response.data.result
+
+          $this.user = result
+        })
+        .catch((e) => {
+          $this.handleError(e)
         })
     },
     updateUser: function() {
       // TODO
       this.warn(this.user.name)
     },
-    logout: function() {
-      this.user = null
+    handleError: function(e) {
+      if (e instanceof AppError) {
+        this.warn(e.message)
+      }
+      else if (e.message.match(/User denied message signature\./)) {
+        this.warn('Please accept the signature request')
+      }
+      else {
+        throw e
+      }
     },
     warn: function(message) {
       this.$message({
@@ -120,6 +132,9 @@ new Vue({
         message: message,
         type: 'warning',
       })
+    },
+    logout: function() {
+      this.user = null
     },
   },
 })
