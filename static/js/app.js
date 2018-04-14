@@ -2,6 +2,7 @@ new Vue({
   el: '#app',
   data: {
     isLoginButtonDisabled: true,
+    token: null,
   },
   created: function() {
     // Is MetaMask installed?
@@ -72,7 +73,27 @@ new Vue({
           return axios.post('/authorize', params)
         })
         .then((result) => {
-          console.log(result)
+          let data = result.data
+          if (data.state === 'error') {
+            throw new AppError(data.result.message)
+          }
+
+          $this.token = data.result.token
+
+          return axios.get('/api/users/' + accounts[0], {
+            headers: {
+              'Authorization': 'Bearer ' + $this.token,
+            },
+          })
+        })
+        .then((result) => {
+          let data = result.data
+          if (data.state === 'error') {
+            throw new AppError(data.result.message)
+          }
+
+          // TODO
+          console.log(data.result)
         })
         .catch((e) => {
           if (e instanceof AppError) {
