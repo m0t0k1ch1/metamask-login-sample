@@ -28,6 +28,6 @@ func (user *User) UpdateChallenge() {
 	user.challenge = strutil.Rand(UserChallengeLength)
 }
 
-func (user *User) AuthTypedData() *AuthTypedData {
-	return NewAuthTypedData(user.Challenge())
+func (user *User) AuthData() *AuthData {
+	return NewAuthData(user.Challenge())
 }

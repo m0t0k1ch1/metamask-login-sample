@@ -59,7 +59,7 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 		return nil, err
 	}
 
-	pubkey, err := user.AuthTypedData().RecoverPubkey(sig)
+	pubkey, err := user.AuthData().RecoverPubkey(sig)
 	if err != nil {
 		return nil, err
 	}
