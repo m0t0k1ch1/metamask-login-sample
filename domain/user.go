@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	UserTokenLength = 32
+	UserChallengeLength = 32
 )
 
 type User struct {
@@ -25,7 +25,7 @@ func (user *User) Challenge() string {
 }
 
 func (user *User) UpdateChallenge() {
-	user.challenge = strutil.Rand(UserTokenLength)
+	user.challenge = strutil.Rand(UserChallengeLength)
 }
 
 func (user *User) AuthTypedData() *AuthTypedData {
