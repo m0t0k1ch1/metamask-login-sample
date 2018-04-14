@@ -12,7 +12,12 @@
     <div id="app">
       <el-container>
         <el-main>
-          <el-button type="primary" v-bind:disabled="isLoginButtonDisabled" @click="login">Login with MetaMask</el-button>
+          <template v-if="token === ''">
+            <el-button type="primary" v-bind:disabled="isLoginButtonDisabled" @click="login">Login with MetaMask</el-button>
+          </template>
+          <template v-else>
+            <el-button @click="logout">Logout</el-button>
+          </template>
         </el-main>
       </el-container>
     </div>

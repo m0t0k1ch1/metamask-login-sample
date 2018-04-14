@@ -2,7 +2,7 @@ new Vue({
   el: '#app',
   data: {
     isLoginButtonDisabled: true,
-    token: null,
+    token: "",
   },
   created: function() {
     // Is MetaMask installed?
@@ -106,6 +106,9 @@ new Vue({
             throw e
           }
         })
+    },
+    logout: function() {
+      this.token = ""
     },
     warn: function(message) {
       this.$message({
