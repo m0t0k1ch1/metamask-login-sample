@@ -14,6 +14,8 @@ const (
 	AuthClaimsExpiryDuration = 72 * time.Hour
 )
 
+var Secret func() string
+
 type AuthTypedData struct {
 	Type  string
 	Name  string
