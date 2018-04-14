@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	TokenLength = 32
+	UserTokenLength = 32
 )
 
 type User struct {
@@ -25,7 +25,7 @@ func (user *User) Token() string {
 }
 
 func (user *User) UpdateToken() {
-	user.token = strutil.Rand(TokenLength)
+	user.token = strutil.Rand(UserTokenLength)
 }
 
 func (user *User) AuthTypedData() *AuthTypedData {
