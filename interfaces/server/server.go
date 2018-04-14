@@ -30,7 +30,7 @@ func New(conf *Config, container *domain.Container) *Server {
 	authGroup.POST("/authorize", auth.AuthorizeHandler)
 
 	apiGroup := srv.Group("/api")
-	apiGroup.Use(middleware.NewAuthenticator(srv.config.App.Secret))
+	apiGroup.Use(middleware.NewAuthenticator(srv.config.App.Auth.Secret))
 	apiGroup.GET("/users/:address", users.GetHandler)
 
 	return srv
@@ -44,5 +44,5 @@ func (srv *Server) Group(prefix string) *Group {
 }
 
 func (srv *Server) Start() error {
-	return srv.Echo.Start(":" + srv.config.Port)
+	return srv.Echo.Start(srv.config.Address())
 }

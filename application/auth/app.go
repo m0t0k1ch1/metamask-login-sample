@@ -94,5 +94,7 @@ func (app *Application) getUser(ctx context.Context, address common.Address) (*u
 }
 
 func (app *Application) newSignedToken(address common.Address) (string, error) {
-	return auth.NewToken(address).SignedString(app.Config.Secret)
+	return auth.NewToken(
+		address, app.Config.Auth.ExpiryDuration(),
+	).SignedString(app.Config.Auth.Secret)
 }

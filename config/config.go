@@ -1,32 +1,22 @@
 package config
 
 import (
+	"encoding/json"
 	"os"
 
-	"github.com/m0t0k1ch1/metamask-login-sample/application"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 )
 
-func getenv(key, defaultValue string) string {
-	s := os.Getenv(key)
-	if s == "" {
-		s = defaultValue
+func NewServerConfig(path string) (*server.Config, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
 	}
 
-	return s
-}
-
-func NewServerConfig() *server.Config {
-	return &server.Config{
-		Port:          getenv("MLS_SERVER_PORT", server.DefaultPort),
-		IndexFilePath: getenv("MLS_SERVER_INDEX_FILE_PATH", server.DefaultIndexFilePath),
-		StaticDirPath: getenv("MLS_SERVER_STATIC_DIR_PATH", server.DefaultStaticDirPath),
-		App:           NewApplicationConfig(),
+	var conf server.Config
+	if err := json.NewDecoder(file).Decode(&conf); err != nil {
+		return nil, err
 	}
-}
 
-func NewApplicationConfig() *application.Config {
-	return &application.Config{
-		Secret: getenv("MLS_APP_SECRET", application.DefaultSecret),
-	}
+	return &conf, nil
 }
