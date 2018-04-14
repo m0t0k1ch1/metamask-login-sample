@@ -23,14 +23,14 @@ func NewAuthTypedData(value string) *AuthTypedData {
 	}
 }
 
-func (data AuthTypedData) signatureHashBytes() []byte {
+func (data *AuthTypedData) signatureHashBytes() []byte {
 	return crypto.Keccak256(
 		crypto.Keccak256([]byte(data.Type+" "+data.Name)),
 		crypto.Keccak256([]byte(data.Value)),
 	)
 }
 
-func (data AuthTypedData) RecoverPubkey(sig Signature) (*Pubkey, error) {
+func (data *AuthTypedData) RecoverPubkey(sig Signature) (*Pubkey, error) {
 	pubkey, err := crypto.SigToPub(data.signatureHashBytes(), sig.Bytes())
 	if err != nil {
 		return nil, err
