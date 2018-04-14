@@ -2,6 +2,7 @@ new Vue({
   el: '#app',
   data: {
     isLoginButtonDisabled: true,
+    user: null,
     token: "",
   },
   created: function() {
@@ -92,8 +93,7 @@ new Vue({
             throw new AppError(data.result.message)
           }
 
-          // TODO
-          console.log(data.result)
+          $this.user = data.result
         })
         .catch((e) => {
           if (e instanceof AppError) {
@@ -107,8 +107,12 @@ new Vue({
           }
         })
     },
+    updateUser: function() {
+      // TODO
+      this.warn(this.user.name)
+    },
     logout: function() {
-      this.token = ""
+      this.user = null
     },
     warn: function(message) {
       this.$message({
