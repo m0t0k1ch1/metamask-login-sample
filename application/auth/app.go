@@ -3,16 +3,23 @@ package auth
 import (
 	"context"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 )
 
+const (
+	secret = "XMa14bGR68BbHzo7IzrmIVzhn83hYi8u"
+)
+
 type Application struct {
+	secret   string
 	userRepo user.Repository
 }
 
 func NewApplication() *Application {
 	return &Application{
+		secret:   secret,
 		userRepo: user.NewRepository(),
 	}
 }
@@ -63,8 +70,10 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 		return nil, domain.ErrInvalidSignature
 	}
 
-	// TODO: create JWT
-	token := "success"
+	token, err := app.newSignedToken(address)
+	if err != nil {
+		return nil, err
+	}
 
 	out := NewAuthorizeOutput(token)
 
@@ -84,4 +93,10 @@ func (app *Application) createUser(ctx context.Context, address domain.Address) 
 
 func (app *Application) getUser(ctx context.Context, address domain.Address) (*domain.User, error) {
 	return app.userRepo.Get(ctx, address)
+}
+
+func (app *Application) newSignedToken(address domain.Address) (string, error) {
+	return jwt.NewWithClaims(
+		jwt.SigningMethodHS256, domain.NewAuthClaims(address),
+	).SignedString([]byte(app.secret))
 }

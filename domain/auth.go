@@ -1,12 +1,17 @@
 package domain
 
 import (
+	"time"
+
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
 const (
 	AuthTypedDataType = "string"
 	AuthTypedDataName = "challenge"
+
+	AuthClaimsExpiryDuration = 72 * time.Hour
 )
 
 type AuthTypedData struct {
@@ -37,4 +42,21 @@ func (data *AuthTypedData) RecoverPubkey(sig Signature) (*Pubkey, error) {
 	}
 
 	return &Pubkey{pubkey}, nil
+}
+
+type AuthClaims struct {
+	Address string `json:"address"`
+	jwt.StandardClaims
+}
+
+func NewAuthClaims(address Address) *AuthClaims {
+	now := time.Now()
+
+	return &AuthClaims{
+		Address: address.Hex(),
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: now.Add(AuthClaimsExpiryDuration).Unix(),
+			IssuedAt:  now.Unix(),
+		},
+	}
 }

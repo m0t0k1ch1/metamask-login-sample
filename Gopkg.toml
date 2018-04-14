@@ -33,6 +33,10 @@
   name = "github.com/ethereum/go-ethereum"
   version = "1.8.3"
 
+[[constraint]]
+  name = "github.com/dgrijalva/jwt-go"
+  version = "3.2.0"
+
 [prune]
   go-tests = true
   unused-packages = true
