@@ -60,7 +60,7 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 		return nil, err
 	}
 
-	pubkey, err := user.Challenge().RecoverPubkey(sig)
+	pubkey, err := user.Challenge().RecoverPublicKey(sig)
 	if err != nil {
 		return nil, err
 	}

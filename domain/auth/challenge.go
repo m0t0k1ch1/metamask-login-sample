@@ -31,11 +31,11 @@ func (challenge *Challenge) signatureHashBytes() []byte {
 	)
 }
 
-func (challenge *Challenge) RecoverPubkey(sig common.Signature) (*common.Pubkey, error) {
+func (challenge *Challenge) RecoverPublicKey(sig common.Signature) (*common.PublicKey, error) {
 	pubkey, err := crypto.SigToPub(challenge.signatureHashBytes(), sig.Bytes())
 	if err != nil {
 		return nil, err
 	}
 
-	return &common.Pubkey{pubkey}, nil
+	return &common.PublicKey{pubkey}, nil
 }

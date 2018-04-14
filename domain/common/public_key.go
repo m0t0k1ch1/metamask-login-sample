@@ -6,10 +6,10 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
-type Pubkey struct {
+type PublicKey struct {
 	*ecdsa.PublicKey
 }
 
-func (pubkey *Pubkey) Address() Address {
+func (pubkey *PublicKey) Address() Address {
 	return Address(crypto.PubkeyToAddress(*pubkey.PublicKey))
 }
