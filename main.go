@@ -17,6 +17,13 @@ func injectDependencies(conf *config.Config) {
 	user.NewRepository = dbUser.NewRepository
 }
 
+func newAuthenticator(conf *config.Config) echo.MiddlewareFunc {
+	return middleware.JWTWithConfig(middleware.JWTConfig{
+		Claims:     &domain.AuthClaims{},
+		SigningKey: []byte(conf.Secret),
+	})
+}
+
 func main() {
 	conf := config.NewConfig()
 
@@ -31,10 +38,7 @@ func main() {
 	e.POST("/authorize", auth.AuthorizeHandler)
 
 	apiGroup := e.Group("/api")
-	apiGroup.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		Claims:     &domain.AuthClaims{},
-		SigningKey: []byte(conf.Secret),
-	}))
+	apiGroup.Use(newAuthenticator(conf))
 	apiGroup.GET("/users/:address", users.GetHandler)
 
 	e.Logger.Fatal(e.Start(":" + conf.Server.Port))
