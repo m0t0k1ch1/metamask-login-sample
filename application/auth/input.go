@@ -16,7 +16,7 @@ func NewChallengeInput(addressHex string) *ChallengeInput {
 
 func (in *ChallengeInput) Validate() error {
 	if ok := domain.IsValidAddressHex(in.AddressHex); !ok {
-		return domain.ErrInvalidAddressFormat
+		return domain.ErrInvalidAddressHex
 	}
 	return nil
 }
@@ -39,10 +39,10 @@ func NewAuthorizeInput(addressHex, sigHex string) *AuthorizeInput {
 
 func (in *AuthorizeInput) Validate() error {
 	if ok := domain.IsValidAddressHex(in.AddressHex); !ok {
-		return domain.ErrInvalidAddressFormat
+		return domain.ErrInvalidAddressHex
 	}
 	if ok := domain.IsValidSignatureHex(in.SigHex); !ok {
-		return domain.ErrInvalidSignatureFormat
+		return domain.ErrInvalidSignatureHex
 	}
 	return nil
 }
