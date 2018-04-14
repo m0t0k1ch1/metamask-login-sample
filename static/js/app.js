@@ -67,7 +67,7 @@ new Vue({
           let params = new URLSearchParams()
           params.append('address', accounts[0])
 
-          return client.post('/challenge', params)
+          return client.post('/auth/challenge', params)
         })
         .then((response) => {
           let result = response.data.result
@@ -85,7 +85,7 @@ new Vue({
           params.append('address', accounts[0])
           params.append('signature', result)
 
-          return client.post('/authorize', params)
+          return client.post('/auth/authorize', params)
         })
         .then((response) => {
           let result = response.data.result

@@ -3,7 +3,7 @@ package auth
 import (
 	"github.com/labstack/echo"
 	"github.com/m0t0k1ch1/metamask-login-sample/application/auth"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/response"
+	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/response"
 )
 
 func ChallengeHandler(c echo.Context) error {
