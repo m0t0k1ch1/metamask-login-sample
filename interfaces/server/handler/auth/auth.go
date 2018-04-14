@@ -1,15 +1,15 @@
 package auth
 
 import (
-	"github.com/labstack/echo"
 	"github.com/m0t0k1ch1/metamask-login-sample/application/auth"
+	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/response"
 )
 
-func ChallengeHandler(c echo.Context) error {
+func ChallengeHandler(c *handler.Context) error {
 	addressHex := c.FormValue("address")
 
-	app := auth.NewApplication()
+	app := auth.NewApplication(c.Config.App, c.Container)
 
 	ctx := c.Request().Context()
 	in := auth.NewChallengeInput(addressHex)
@@ -22,11 +22,11 @@ func ChallengeHandler(c echo.Context) error {
 	return response.JSONSuccess(c, out)
 }
 
-func AuthorizeHandler(c echo.Context) error {
+func AuthorizeHandler(c *handler.Context) error {
 	addressHex := c.FormValue("address")
 	sigHex := c.FormValue("signature")
 
-	app := auth.NewApplication()
+	app := auth.NewApplication(c.Config.App, c.Container)
 
 	ctx := c.Request().Context()
 	in := auth.NewAuthorizeInput(addressHex, sigHex)

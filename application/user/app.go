@@ -3,17 +3,19 @@ package user
 import (
 	"context"
 
+	"github.com/m0t0k1ch1/metamask-login-sample/config"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/model"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/repository"
 )
 
 type Application struct {
-	userRepo user.Repository
+	userRepo repository.User
 }
 
-func NewApplication() *Application {
+func NewApplication(conf *config.AppConfig, container *domain.Container) *Application {
 	return &Application{
-		userRepo: user.NewRepository(),
+		userRepo: container.NewUserRepository(),
 	}
 }
 
@@ -34,6 +36,6 @@ func (app *Application) GetUser(ctx context.Context, in *GetUserInput) (*GetUser
 	return out, nil
 }
 
-func (app *Application) getUser(ctx context.Context, address domain.Address) (*domain.User, error) {
+func (app *Application) getUser(ctx context.Context, address model.Address) (*model.User, error) {
 	return app.userRepo.Get(ctx, address)
 }

@@ -1,4 +1,4 @@
-package domain
+package model
 
 import "github.com/ethereum/go-ethereum/common"
 
@@ -10,8 +10,4 @@ func (address Address) Hex() string {
 
 func NewAddressFromHex(addressHex string) Address {
 	return Address(common.HexToAddress(addressHex))
-}
-
-func IsValidAddressHex(addressHex string) bool {
-	return common.IsHexAddress(addressHex)
 }

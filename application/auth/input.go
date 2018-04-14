@@ -2,6 +2,8 @@ package auth
 
 import (
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/model"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/spec"
 )
 
 type ChallengeInput struct {
@@ -15,14 +17,14 @@ func NewChallengeInput(addressHex string) *ChallengeInput {
 }
 
 func (in *ChallengeInput) Validate() error {
-	if ok := domain.IsValidAddressHex(in.AddressHex); !ok {
+	if ok := spec.IsValidAddressHex(in.AddressHex); !ok {
 		return domain.ErrInvalidAddressHex
 	}
 	return nil
 }
 
-func (in *ChallengeInput) Address() domain.Address {
-	return domain.NewAddressFromHex(in.AddressHex)
+func (in *ChallengeInput) Address() model.Address {
+	return model.NewAddressFromHex(in.AddressHex)
 }
 
 type AuthorizeInput struct {
@@ -38,19 +40,19 @@ func NewAuthorizeInput(addressHex, sigHex string) *AuthorizeInput {
 }
 
 func (in *AuthorizeInput) Validate() error {
-	if ok := domain.IsValidAddressHex(in.AddressHex); !ok {
+	if ok := spec.IsValidAddressHex(in.AddressHex); !ok {
 		return domain.ErrInvalidAddressHex
 	}
-	if ok := domain.IsValidSignatureHex(in.SigHex); !ok {
+	if ok := spec.IsValidSignatureHex(in.SigHex); !ok {
 		return domain.ErrInvalidSignatureHex
 	}
 	return nil
 }
 
-func (in *AuthorizeInput) Address() domain.Address {
-	return domain.NewAddressFromHex(in.AddressHex)
+func (in *AuthorizeInput) Address() model.Address {
+	return model.NewAddressFromHex(in.AddressHex)
 }
 
-func (in *AuthorizeInput) Signature() domain.Signature {
-	return domain.NewSignatureFromHex(in.SigHex)
+func (in *AuthorizeInput) Signature() model.Signature {
+	return model.NewSignatureFromHex(in.SigHex)
 }

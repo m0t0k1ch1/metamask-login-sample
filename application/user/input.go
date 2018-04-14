@@ -1,6 +1,10 @@
 package user
 
-import "github.com/m0t0k1ch1/metamask-login-sample/domain"
+import (
+	"github.com/m0t0k1ch1/metamask-login-sample/domain"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/model"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/spec"
+)
 
 type GetUserInput struct {
 	AddressHex string
@@ -13,12 +17,12 @@ func NewGetUserInput(addressHex string) *GetUserInput {
 }
 
 func (in *GetUserInput) Validate() error {
-	if ok := domain.IsValidAddressHex(in.AddressHex); !ok {
+	if ok := spec.IsValidAddressHex(in.AddressHex); !ok {
 		return domain.ErrInvalidAddressHex
 	}
 	return nil
 }
 
-func (in *GetUserInput) Address() domain.Address {
-	return domain.NewAddressFromHex(in.AddressHex)
+func (in *GetUserInput) Address() model.Address {
+	return model.NewAddressFromHex(in.AddressHex)
 }

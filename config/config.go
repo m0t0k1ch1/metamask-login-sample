@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	DefaultSecret = "secret"
+	DefaultAppSecret = "secret"
 
 	DefaultServerPort          = "1323"
 	DefaultServerIndexFilePath = "index.html"
@@ -22,16 +22,24 @@ func getenv(key, defaultValue string) string {
 }
 
 type Config struct {
-	Secret string
+	App    *AppConfig
 	Server *ServerConfig
 }
 
 func NewConfig() *Config {
-	secret := getenv("MLS_SECRET", DefaultSecret)
-
 	return &Config{
-		Secret: secret,
+		App:    NewAppConfig(),
 		Server: NewServerConfig(),
+	}
+}
+
+type AppConfig struct {
+	Secret string
+}
+
+func NewAppConfig() *AppConfig {
+	return &AppConfig{
+		Secret: getenv("MLS_APP_SECRET", DefaultAppSecret),
 	}
 }
 
