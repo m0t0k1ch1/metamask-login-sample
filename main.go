@@ -13,10 +13,7 @@ import (
 )
 
 func injectDependencies(conf *config.Config) {
-	appAuth.Secret = func() string {
-		return conf.Secret
-	}
-
+	appAuth.Secret = func() string { return conf.Secret }
 	user.NewRepository = dbUser.NewRepository
 }
 
