@@ -60,11 +60,11 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 		return nil, err
 	}
 
-	pubkey, err := user.Challenge().RecoverPublicKey(sig)
+	recoverdAddress, err := user.Challenge().RecoverAddress(sig)
 	if err != nil {
 		return nil, err
 	}
-	if pubkey.Address().Hex() != address.Hex() {
+	if recoverdAddress.Hex() != address.Hex() {
 		return nil, domain.ErrInvalidSignature
 	}
 
