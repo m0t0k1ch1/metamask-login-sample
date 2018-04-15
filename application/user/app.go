@@ -31,7 +31,5 @@ func (app *Application) GetUser(ctx context.Context, in *GetUserInput) (*GetUser
 		return nil, err
 	}
 
-	out := NewGetUserOutput(u)
-
-	return out, nil
+	return NewGetUserOutput(u), nil
 }
