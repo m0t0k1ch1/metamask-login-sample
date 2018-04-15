@@ -1,42 +1,54 @@
 package server
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
-	"os"
 
+	"github.com/labstack/gommon/log"
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/auth"
 	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/cache/user"
 )
 
+var (
+	ErrUnknownLogLevel = errors.New("Unknown log level")
+)
+
+var (
+	logLevels = map[string]log.Lvl{
+		"DEBUG": log.DEBUG,
+		"INFO":  log.INFO,
+		"WARN":  log.WARN,
+		"ERROR": log.ERROR,
+		"OFF":   log.OFF,
+	}
+)
+
 type Config struct {
 	Port          int                 `json:"port"`
 	IndexFilePath string              `json:"index_file_path"`
 	StaticDirPath string              `json:"static_dir_path"`
+	LogLevel      string              `json:"log_level"`
 	App           *application.Config `json:"app"`
 }
 
-func NewConfig(path string) (*Config, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
+func (conf *Config) Validate() error {
+	if _, ok := logLevels[conf.LogLevel]; !ok {
+		return ErrUnknownLogLevel
 	}
-
-	var conf Config
-	if err := json.NewDecoder(file).Decode(&conf); err != nil {
-		return nil, err
-	}
-
-	return &conf, nil
+	return nil
 }
 
 func (conf *Config) Address() string {
 	return fmt.Sprintf(":%d", conf.Port)
 }
 
-func (conf *Config) newContainer() *domain.Container {
+func (conf *Config) LogLvl() log.Lvl {
+	return logLevels[conf.LogLevel]
+}
+
+func (conf *Config) container() *domain.Container {
 	return &domain.Container{
 		AuthService: auth.NewService(
 			conf.App.Auth.Secret,

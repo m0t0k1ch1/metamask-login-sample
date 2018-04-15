@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -15,19 +15,35 @@ const (
 	DefaultConfigPath = "config.json"
 )
 
+func loadConfig(path string) (*server.Config, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var conf server.Config
+	if err := json.NewDecoder(file).Decode(&conf); err != nil {
+		return nil, err
+	}
+	if err := conf.Validate(); err != nil {
+		return nil, err
+	}
+
+	return &conf, nil
+}
+
 func main() {
 	var confPath = flag.String("conf", DefaultConfigPath, "path to your config.json")
 	flag.Parse()
 
-	conf, err := server.NewConfig(*confPath)
+	conf, err := loadConfig(*confPath)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	srv := server.New(conf)
 
 	done := make(chan bool, 1)
-
 	go func() {
 		sigterm := make(chan os.Signal, 1)
 		signal.Notify(sigterm, syscall.SIGTERM)
@@ -38,7 +54,6 @@ func main() {
 		}
 		close(done)
 	}()
-
 	if err := srv.Start(); err != nil {
 		srv.Logger.Info(err)
 	}
