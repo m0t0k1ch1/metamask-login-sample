@@ -23,7 +23,6 @@ func New(conf *Config) *Server {
 
 	srv.Logger.SetLevel(srv.config.LogLvl())
 
-	srv.Use(middleware.NewLogger())
 	srv.File("/", srv.config.IndexFilePath)
 	srv.Static("/static", srv.config.StaticDirPath)
 
