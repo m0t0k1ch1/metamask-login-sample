@@ -7,9 +7,9 @@ type GetUserOutput struct {
 	AddressHex string `json:"address"`
 }
 
-func NewGetUserOutput(user *user.User) *GetUserOutput {
+func NewGetUserOutput(u *user.User) *GetUserOutput {
 	return &GetUserOutput{
-		Name:       user.Name,
-		AddressHex: user.Address.Hex(),
+		Name:       u.Name,
+		AddressHex: u.Address.Hex(),
 	}
 }

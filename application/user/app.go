@@ -26,12 +26,12 @@ func (app *Application) GetUser(ctx context.Context, in *GetUserInput) (*GetUser
 
 	address := in.Address()
 
-	user, err := app.userRepo.Get(ctx, address)
+	u, err := app.userRepo.Get(ctx, address)
 	if err != nil {
 		return nil, err
 	}
 
-	out := NewGetUserOutput(user)
+	out := NewGetUserOutput(u)
 
 	return out, nil
 }
