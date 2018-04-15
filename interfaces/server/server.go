@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler/api/users"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler/auth"
@@ -20,6 +21,9 @@ func New(conf *Config, container *domain.Container) *Server {
 		config:    conf,
 		container: container,
 	}
+
+	// TODO: enable to configure log level in config.json
+	srv.Logger.SetLevel(log.INFO)
 
 	srv.Use(middleware.NewLogger())
 	srv.File("/", srv.config.IndexFilePath)
