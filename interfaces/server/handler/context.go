@@ -12,10 +12,6 @@ type Context struct {
 	Core *application.Core
 }
 
-func (c *Context) claims() *auth.Claims {
+func (c *Context) Claims() *auth.Claims {
 	return c.Get("user").(*jwt.Token).Claims.(*auth.Claims)
-}
-
-func (c *Context) VerifyUser(addressHex string) bool {
-	return c.claims().AddressHex == addressHex
 }

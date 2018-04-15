@@ -10,7 +10,7 @@ import (
 func GetHandler(c *handler.Context) error {
 	addressHex := c.Param("address")
 
-	if ok := c.VerifyUser(addressHex); !ok {
+	if c.Claims().AddressHex != addressHex {
 		return echo.ErrNotFound
 	}
 
