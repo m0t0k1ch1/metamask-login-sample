@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
 )
 
@@ -17,7 +16,7 @@ func NewChallengeInput(addressHex string) *ChallengeInput {
 
 func (in *ChallengeInput) Validate() error {
 	if ok := common.IsValidAddressHex(in.AddressHex); !ok {
-		return domain.ErrInvalidAddressHex
+		return common.ErrInvalidAddressHex
 	}
 	return nil
 }
@@ -40,10 +39,10 @@ func NewAuthorizeInput(addressHex, sigHex string) *AuthorizeInput {
 
 func (in *AuthorizeInput) Validate() error {
 	if ok := common.IsValidAddressHex(in.AddressHex); !ok {
-		return domain.ErrInvalidAddressHex
+		return common.ErrInvalidAddressHex
 	}
 	if ok := common.IsValidSignatureHex(in.SigHex); !ok {
-		return domain.ErrInvalidSignatureHex
+		return common.ErrInvalidSignatureHex
 	}
 	return nil
 }

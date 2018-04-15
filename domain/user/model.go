@@ -1,7 +1,6 @@
 package user
 
 import (
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/auth"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
 	"github.com/m0t0k1ch1/metamask-login-sample/library/strutil"
 )
@@ -13,19 +12,23 @@ const (
 type User struct {
 	Name      string
 	Address   common.Address
-	challenge *auth.Challenge
+	challenge string
 }
 
-func NewUser(address common.Address) *User {
-	return &User{
+func NewUser(name string, address common.Address) *User {
+	u := &User{
+		Name:    name,
 		Address: address,
 	}
+	u.RegenerateChallengeString()
+
+	return u
 }
 
-func (user *User) Challenge() *auth.Challenge {
-	return user.challenge
+func (u *User) ChallengeString() string {
+	return u.challenge
 }
 
-func (user *User) UpdateChallenge() {
-	user.challenge = auth.NewChallenge(strutil.Rand(UserChallengeLength))
+func (u *User) RegenerateChallengeString() {
+	u.challenge = strutil.Rand(UserChallengeLength)
 }

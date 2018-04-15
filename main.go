@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/m0t0k1ch1/metamask-login-sample/config"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 )
 
@@ -20,12 +19,12 @@ func main() {
 	var confPath = flag.String("conf", DefaultConfigPath, "path to your config.json")
 	flag.Parse()
 
-	conf, err := config.NewServerConfig(*confPath)
+	conf, err := server.NewConfig(*confPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	srv := server.New(conf, config.NewContainer())
+	srv := server.New(conf)
 
 	done := make(chan bool, 1)
 

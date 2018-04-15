@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
 )
 
 func JSONSuccess(c echo.Context, result interface{}) error {
@@ -12,12 +12,12 @@ func JSONSuccess(c echo.Context, result interface{}) error {
 }
 
 func JSONError(c echo.Context, err error) error {
-	var result *domain.Error
-	if domainErr, ok := err.(*domain.Error); ok {
-		result = domainErr
+	var result *common.Error
+	if commonErr, ok := err.(*common.Error); ok {
+		result = commonErr
 	} else {
 		c.Logger().Error(err)
-		result = domain.NewUnexpectedError()
+		result = common.NewUnexpectedError()
 	}
 
 	return c.JSON(http.StatusOK, newErrorResponse(result))

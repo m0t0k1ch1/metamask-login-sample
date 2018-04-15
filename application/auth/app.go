@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/auth"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
@@ -12,13 +11,15 @@ import (
 
 type Application struct {
 	*application.Core
-	userRepo user.Repository
+	authService auth.Service
+	userRepo    user.Repository
 }
 
 func NewApplication(core *application.Core) *Application {
 	return &Application{
-		Core:     core,
-		userRepo: core.Container.NewUserRepository(),
+		Core:        core,
+		authService: core.Container.AuthService,
+		userRepo:    core.Container.UserRepo,
 	}
 }
 
@@ -29,22 +30,23 @@ func (app *Application) Challenge(ctx context.Context, in *ChallengeInput) (*Cha
 
 	address := in.Address()
 
-	user, err := app.getUser(ctx, address)
+	u, err := app.userRepo.Get(ctx, address)
 	switch err {
 	case nil:
-		user.UpdateChallenge()
-	case domain.ErrUserNotFound:
-		user, err = app.createUser(ctx, address)
-		if err != nil {
+		u.RegenerateChallengeString()
+		if err := app.userRepo.Update(ctx, u); err != nil {
+			return nil, err
+		}
+	case common.ErrUserNotFound:
+		u = user.NewUser("", address)
+		if err := app.userRepo.Add(ctx, u); err != nil {
 			return nil, err
 		}
 	default:
 		return nil, err
 	}
 
-	out := NewChallengeOutput(user.Challenge())
-
-	return out, nil
+	return NewChallengeOutput(u.ChallengeString()), nil
 }
 
 func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*AuthorizeOutput, error) {
@@ -55,46 +57,19 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 	address := in.Address()
 	sig := in.Signature()
 
-	user, err := app.getUser(ctx, address)
+	u, err := app.userRepo.Get(ctx, address)
 	if err != nil {
 		return nil, err
 	}
 
-	recoveredAddress, err := user.Challenge().RecoverAddress(sig)
+	token, err := app.authService.Authorize(u, sig)
 	if err != nil {
 		return nil, err
 	}
-	if recoveredAddress.Hex() != address.Hex() {
-		return nil, domain.ErrInvalidSignature
-	}
-
-	token, err := app.newSignedToken(address)
+	tokenStr, err := app.authService.Sign(token)
 	if err != nil {
 		return nil, err
 	}
 
-	out := NewAuthorizeOutput(token)
-
-	return out, nil
-}
-
-func (app *Application) createUser(ctx context.Context, address common.Address) (*user.User, error) {
-	user := user.NewUser(address)
-	user.UpdateChallenge()
-
-	if err := app.userRepo.Add(ctx, user); err != nil {
-		return nil, err
-	}
-
-	return user, nil
-}
-
-func (app *Application) getUser(ctx context.Context, address common.Address) (*user.User, error) {
-	return app.userRepo.Get(ctx, address)
-}
-
-func (app *Application) newSignedToken(address common.Address) (string, error) {
-	return auth.NewToken(
-		address, app.Config.Auth.ExpiryDuration(),
-	).SignedString(app.Config.Auth.Secret)
+	return NewAuthorizeOutput(tokenStr), nil
 }

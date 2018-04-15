@@ -15,11 +15,11 @@ type Server struct {
 	container *domain.Container
 }
 
-func New(conf *Config, container *domain.Container) *Server {
+func New(conf *Config) *Server {
 	srv := &Server{
 		Echo:      echo.New(),
 		config:    conf,
-		container: container,
+		container: conf.newContainer(),
 	}
 
 	// TODO: enable to configure log level in config.json

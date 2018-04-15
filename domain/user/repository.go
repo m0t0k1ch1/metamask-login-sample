@@ -7,8 +7,8 @@ import (
 )
 
 type Repository interface {
-	Add(ctx context.Context, user *User) error
+	Add(ctx context.Context, u *User) error
 	Get(ctx context.Context, address common.Address) (*User, error)
-	Update(ctx context.Context, user *User) error
-	Delete(ctx context.Context, user *User) error
+	Update(ctx context.Context, u *User) error
+	Delete(ctx context.Context, u *User) error
 }

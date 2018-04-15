@@ -7,10 +7,10 @@ type Config struct {
 }
 
 type AuthConfig struct {
-	Secret                string `json:"secret"`
-	ExpiryDurationSeconds int    `json:"expiry_duration_seconds"`
+	Secret                     string `json:"secret"`
+	TokenExpiryDurationSeconds int    `json:"token_expiry_duration_seconds"`
 }
 
-func (conf *AuthConfig) ExpiryDuration() time.Duration {
-	return time.Duration(conf.ExpiryDurationSeconds) * time.Second
+func (conf *AuthConfig) TokenExpiryDuration() time.Duration {
+	return time.Duration(conf.TokenExpiryDurationSeconds) * time.Second
 }

@@ -5,7 +5,7 @@
     "app": {
         "auth": {
             "secret": "secret",
-            "expiry_duration_seconds": 86400
+            "token_expiry_duration_seconds": 86400
         }
     }
 }
