@@ -33,12 +33,17 @@ func (app *Application) Challenge(ctx context.Context, in *ChallengeInput) (*Cha
 	u, err := app.userRepo.Get(ctx, address)
 	switch err {
 	case nil:
-		u.RegenerateChallengeString()
+		if err := app.authService.SetUpChallenge(u); err != nil {
+			return nil, err
+		}
 		if err := app.userRepo.Update(ctx, u); err != nil {
 			return nil, err
 		}
 	case common.ErrUserNotFound:
 		u = user.NewUser("", address)
+		if err := app.authService.SetUpChallenge(u); err != nil {
+			return nil, err
+		}
 		if err := app.userRepo.Add(ctx, u); err != nil {
 			return nil, err
 		}
@@ -46,7 +51,7 @@ func (app *Application) Challenge(ctx context.Context, in *ChallengeInput) (*Cha
 		return nil, err
 	}
 
-	return NewChallengeOutput(u.ChallengeString()), nil
+	return NewChallengeOutput(u.Challenge), nil
 }
 
 func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*AuthorizeOutput, error) {
@@ -62,14 +67,13 @@ func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*Aut
 		return nil, err
 	}
 
-	token, err := app.authService.Authorize(u, sig)
-	if err != nil {
+	if err := app.authService.VerifyResponse(u, sig.Bytes()); err != nil {
 		return nil, err
 	}
-	tokenStr, err := app.authService.Sign(token)
+	tokenBytes, err := app.authService.IssueToken(u)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewAuthorizeOutput(tokenStr), nil
+	return NewAuthorizeOutput(string(tokenBytes)), nil
 }

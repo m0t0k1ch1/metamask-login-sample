@@ -4,9 +4,9 @@ type ChallengeOutput struct {
 	Challenge string `json:"challenge"`
 }
 
-func NewChallengeOutput(challengeStr string) *ChallengeOutput {
+func NewChallengeOutput(challenge string) *ChallengeOutput {
 	return &ChallengeOutput{
-		Challenge: challengeStr,
+		Challenge: challenge,
 	}
 }
 
@@ -14,8 +14,8 @@ type AuthorizeOutput struct {
 	Token string `json:"token"`
 }
 
-func NewAuthorizeOutput(tokenStr string) *AuthorizeOutput {
+func NewAuthorizeOutput(token string) *AuthorizeOutput {
 	return &AuthorizeOutput{
-		Token: tokenStr,
+		Token: token,
 	}
 }

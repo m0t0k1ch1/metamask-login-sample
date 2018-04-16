@@ -1,4 +1,4 @@
-package auth
+package metamask
 
 import (
 	"time"
@@ -12,13 +12,13 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func NewClaims(address common.Address, duration time.Duration) *Claims {
+func newClaims(address common.Address, d time.Duration) *Claims {
 	now := time.Now()
 
 	return &Claims{
 		AddressHex: address.Hex(),
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: now.Add(duration).Unix(),
+			ExpiresAt: now.Add(d).Unix(),
 			IssuedAt:  now.Unix(),
 		},
 	}
