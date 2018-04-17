@@ -12,6 +12,9 @@ func NewAddressFromHex(addressHex string) Address {
 	return Address(common.HexToAddress(addressHex))
 }
 
-func IsValidAddressHex(addressHex string) bool {
-	return common.IsHexAddress(addressHex)
+func ValidateAddressHex(addressHex string) error {
+	if !common.IsHexAddress(addressHex) {
+		return ErrInvalidAddressHex
+	}
+	return nil
 }

@@ -30,10 +30,17 @@ func NewSignatureFromHex(sigHex string) Signature {
 	return sig
 }
 
-func IsValidSignatureHex(sigHex string) bool {
+func ValidateSignatureHex(sigHex string) error {
 	if strutil.HasHexPrefix(sigHex) {
 		sigHex = sigHex[2:]
 	}
 
-	return len(sigHex) == 2*SignatureLength && strutil.IsHex(sigHex)
+	if len(sigHex) != 2*SignatureLength {
+		return ErrInvalidSignatureLength
+	}
+	if !strutil.IsHex(sigHex) {
+		return ErrInvalidSignatureHex
+	}
+
+	return nil
 }

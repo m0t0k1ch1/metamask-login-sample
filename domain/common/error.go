@@ -7,9 +7,10 @@ import (
 var (
 	ErrCodeUnexpected = 1000
 
-	ErrInvalidAddressHex   = NewError(2001, "Invalid address hex")
-	ErrInvalidSignatureHex = NewError(2002, "Invalid signature hex")
-	ErrInvalidSignature    = NewError(2003, "Invalid signature")
+	ErrInvalidAddressHex      = NewError(2001, "Invalid address hex")
+	ErrInvalidSignatureLength = NewError(2002, "Invalid signature length")
+	ErrInvalidSignatureHex    = NewError(2003, "Invalid signature hex")
+	ErrInvalidSignature       = NewError(2004, "Invalid signature")
 
 	ErrUserNotFound      = NewError(3001, "User not found")
 	ErrUserAlreadyExists = NewError(3002, "User already exists")

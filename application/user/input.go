@@ -15,8 +15,8 @@ func NewGetUserInput(addressHex string) *GetUserInput {
 }
 
 func (in *GetUserInput) Validate() error {
-	if ok := common.IsValidAddressHex(in.AddressHex); !ok {
-		return common.ErrInvalidAddressHex
+	if err := common.ValidateAddressHex(in.AddressHex); err != nil {
+		return err
 	}
 	return nil
 }
