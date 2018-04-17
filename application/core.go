@@ -3,13 +3,13 @@ package application
 import "github.com/m0t0k1ch1/metamask-login-sample/domain"
 
 type Core struct {
-	Config    *Config
-	Container *domain.Container
+	*domain.Container
+	Config *Config
 }
 
-func NewCore(config *Config, container *domain.Container) *Core {
+func NewCore(container *domain.Container, conf *Config) *Core {
 	return &Core{
-		Config:    config,
 		Container: container,
+		Config:    conf,
 	}
 }

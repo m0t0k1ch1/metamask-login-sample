@@ -6,9 +6,6 @@ import (
 
 	"github.com/labstack/gommon/log"
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain"
-	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/auth/metamask"
-	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/cache/user"
 )
 
 var (
@@ -46,14 +43,4 @@ func (conf *Config) Address() string {
 
 func (conf *Config) LogLvl() log.Lvl {
 	return logLevels[conf.LogLevel]
-}
-
-func (conf *Config) container() *domain.Container {
-	return &domain.Container{
-		AuthService: metamask.NewService(
-			conf.App.Auth.Secret,
-			conf.App.Auth.TokenExpiryDuration(),
-		),
-		UserRepo: user.NewRepository(),
-	}
 }

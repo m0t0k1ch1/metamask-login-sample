@@ -36,7 +36,7 @@ func (g *Group) Add(method, path string, h handler.HandlerFunc) {
 	g.group.Add(method, path, func(ec echo.Context) error {
 		return h(&handler.Context{
 			Context: ec,
-			Core:    application.NewCore(g.server.config.App, g.server.container),
+			Core:    application.NewCore(g.server.container, g.server.config.App),
 		})
 	})
 }

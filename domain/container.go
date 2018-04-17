@@ -6,6 +6,14 @@ import (
 )
 
 type Container struct {
-	AuthService auth.Service
-	UserRepo    user.Repository
+	Services     *Services
+	Repositories *Repositories
+}
+
+type Services struct {
+	Auth auth.Service
+}
+
+type Repositories struct {
+	User user.Repository
 }

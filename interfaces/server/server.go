@@ -18,7 +18,7 @@ func New(conf *Config) *Server {
 	srv := &Server{
 		Echo:      echo.New(),
 		config:    conf,
-		container: conf.container(),
+		container: newContainer(conf),
 	}
 
 	srv.Logger.SetLevel(srv.config.LogLvl())
