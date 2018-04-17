@@ -40,7 +40,7 @@ func NewUpdateUserInput(addressHex, name string) *UpdateUserInput {
 
 func (in *UpdateUserInput) Validate() error {
 	if err := common.ValidateAddressHex(in.AddressHex); err != nil {
-		return nil
+		return err
 	}
 	if err := user.ValidateUserName(in.Name); err != nil {
 		return err
