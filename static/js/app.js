@@ -103,7 +103,7 @@ new Vue({
           $this.handleError(e)
         })
     },
-    updateUser: function(address, name) {
+    updateUser: function() {
       let $this = this
 
       let params = new URLSearchParams()
@@ -112,6 +112,17 @@ new Vue({
       client.put('/api/users/' + $this.user.address, params)
         .then((response) => {
           $this.info('success')
+        })
+        .catch((e) => {
+          $this.handleError(e)
+        })
+    },
+    deleteUser: function() {
+      let $this = this
+
+      client.delete('/api/users/' + $this.user.address)
+        .then((response) => {
+          $this.logout()
         })
         .catch((e) => {
           $this.handleError(e)

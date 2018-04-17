@@ -37,6 +37,7 @@ func New(conf *Config) *Server {
 	apiGroup.Use(middleware.NewAuthenticator(srv.config.App.Auth.Secret))
 	apiGroup.GET("/users/:address", users.GetHandler)
 	apiGroup.PUT("/users/:address", users.UpdateHandler)
+	apiGroup.DELETE("/users/:address", users.DeleteHandler)
 
 	return srv
 }

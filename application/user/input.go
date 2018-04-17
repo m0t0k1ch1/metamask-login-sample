@@ -51,3 +51,24 @@ func (in *UpdateUserInput) Validate() error {
 func (in *UpdateUserInput) Address() common.Address {
 	return common.NewAddressFromHex(in.AddressHex)
 }
+
+type DeleteUserInput struct {
+	AddressHex string
+}
+
+func NewDeleteUserInput(addressHex string) *DeleteUserInput {
+	return &DeleteUserInput{
+		AddressHex: addressHex,
+	}
+}
+
+func (in *DeleteUserInput) Validate() error {
+	if err := common.ValidateAddressHex(in.AddressHex); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (in *DeleteUserInput) Address() common.Address {
+	return common.NewAddressFromHex(in.AddressHex)
+}

@@ -19,3 +19,9 @@ type UpdateUserOutput struct{}
 func NewUpdateUserOutput() *UpdateUserOutput {
 	return &UpdateUserOutput{}
 }
+
+type DeleteUserOutput struct{}
+
+func NewDeleteUserOutput() *DeleteUserOutput {
+	return &DeleteUserOutput{}
+}

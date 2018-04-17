@@ -9,6 +9,7 @@ import (
 type Application interface {
 	GetUser(ctx context.Context, in *GetUserInput) (*GetUserOutput, error)
 	UpdateUser(ctx context.Context, in *UpdateUserInput) (*UpdateUserOutput, error)
+	DeleteUser(ctx context.Context, in *DeleteUserInput) (*DeleteUserOutput, error)
 }
 
 type applicationImpl struct {
@@ -54,4 +55,23 @@ func (app *applicationImpl) UpdateUser(ctx context.Context, in *UpdateUserInput)
 	}
 
 	return NewUpdateUserOutput(), nil
+}
+
+func (app *applicationImpl) DeleteUser(ctx context.Context, in *DeleteUserInput) (*DeleteUserOutput, error) {
+	if err := in.Validate(); err != nil {
+		return nil, err
+	}
+
+	address := in.Address()
+
+	u, err := app.Repositories.User.Get(ctx, address)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := app.Repositories.User.Delete(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return NewDeleteUserOutput(), nil
 }

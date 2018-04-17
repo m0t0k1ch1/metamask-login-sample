@@ -47,3 +47,23 @@ func UpdateHandler(c *handler.Context) error {
 
 	return response.JSONSuccess(c, out)
 }
+
+func DeleteHandler(c *handler.Context) error {
+	addressHex := c.Param("address")
+
+	if c.Claims().AddressHex != addressHex {
+		return echo.ErrNotFound
+	}
+
+	app := user.NewApplication(c.Core)
+
+	ctx := c.Request().Context()
+	in := user.NewDeleteUserInput(addressHex)
+
+	out, err := app.DeleteUser(ctx, in)
+	if err != nil {
+		return response.JSONError(c, err)
+	}
+
+	return response.JSONSuccess(c, out)
+}
