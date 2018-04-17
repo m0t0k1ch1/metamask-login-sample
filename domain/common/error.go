@@ -12,9 +12,15 @@ var (
 	ErrInvalidSignatureHex    = NewError(2003, "Invalid signature hex")
 	ErrInvalidSignature       = NewError(2004, "Invalid signature")
 
-	ErrUserNotFound      = NewError(3001, "User not found")
-	ErrUserAlreadyExists = NewError(3002, "User already exists")
-	ErrUserBroken        = NewError(3003, "User broken")
+	ErrTooShortUserName = NewError(3001,
+		fmt.Sprintf("Too short user name (min: %d)", UserNameLengthMin),
+	)
+	ErrTooLongUserName = NewError(3002,
+		fmt.Sprintf("Too long user name (max: %d)", UserNameLengthMax),
+	)
+	ErrUserNotFound      = NewError(3003, "User not found")
+	ErrUserAlreadyExists = NewError(3004, "User already exists")
+	ErrUserBroken        = NewError(3005, "User broken")
 )
 
 type Error struct {

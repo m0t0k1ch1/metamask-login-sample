@@ -8,6 +8,7 @@ import (
 
 type Application interface {
 	GetUser(ctx context.Context, in *GetUserInput) (*GetUserOutput, error)
+	UpdateUser(ctx context.Context, in *UpdateUserInput) (*UpdateUserOutput, error)
 }
 
 type applicationImpl struct {
@@ -31,4 +32,26 @@ func (app *applicationImpl) GetUser(ctx context.Context, in *GetUserInput) (*Get
 	}
 
 	return NewGetUserOutput(u), nil
+}
+
+func (app *applicationImpl) UpdateUser(ctx context.Context, in *UpdateUserInput) (*UpdateUserOutput, error) {
+	if err := in.Validate(); err != nil {
+		return nil, err
+	}
+
+	address := in.Address()
+	name := in.Name
+
+	u, err := app.Repositories.User.Get(ctx, address)
+	if err != nil {
+		return nil, err
+	}
+
+	u.Name = name
+
+	if err := app.Repositories.User.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return NewUpdateUserOutput(), nil
 }

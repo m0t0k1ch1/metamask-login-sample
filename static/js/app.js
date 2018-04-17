@@ -103,9 +103,19 @@ new Vue({
           $this.handleError(e)
         })
     },
-    updateUser: function() {
-      // TODO
-      this.warn(this.user.name)
+    updateUser: function(address, name) {
+      let $this = this
+
+      let params = new URLSearchParams()
+      params.append('name', $this.user.name)
+
+      client.put('/api/users/' + $this.user.address, params)
+        .then((response) => {
+          $this.info('success')
+        })
+        .catch((e) => {
+          $this.handleError(e)
+        })
     },
     handleError: function(e) {
       if (e instanceof AppError) {
@@ -117,6 +127,13 @@ new Vue({
       else {
         throw e
       }
+    },
+    info: function(message) {
+      this.$message({
+        showClose: true,
+        message: message,
+        type: 'info',
+      })
     },
     warn: function(message) {
       this.$message({

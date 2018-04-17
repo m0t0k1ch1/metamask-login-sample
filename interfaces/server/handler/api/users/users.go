@@ -26,3 +26,24 @@ func GetHandler(c *handler.Context) error {
 
 	return response.JSONSuccess(c, out)
 }
+
+func UpdateHandler(c *handler.Context) error {
+	addressHex := c.Param("address")
+	name := c.FormValue("name")
+
+	if c.Claims().AddressHex != addressHex {
+		return echo.ErrNotFound
+	}
+
+	app := user.NewApplication(c.Core)
+
+	ctx := c.Request().Context()
+	in := user.NewUpdateUserInput(addressHex, name)
+
+	out, err := app.UpdateUser(ctx, in)
+	if err != nil {
+		return response.JSONError(c, err)
+	}
+
+	return response.JSONSuccess(c, out)
+}

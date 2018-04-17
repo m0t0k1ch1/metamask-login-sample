@@ -36,6 +36,7 @@ func New(conf *Config) *Server {
 	apiGroup := srv.Group("/api")
 	apiGroup.Use(middleware.NewAuthenticator(srv.config.App.Auth.Secret))
 	apiGroup.GET("/users/:address", users.GetHandler)
+	apiGroup.PUT("/users/:address", users.UpdateHandler)
 
 	return srv
 }

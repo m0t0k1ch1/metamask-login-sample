@@ -13,3 +13,9 @@ func NewGetUserOutput(u *user.User) *GetUserOutput {
 		AddressHex: u.Address.Hex(),
 	}
 }
+
+type UpdateUserOutput struct{}
+
+func NewUpdateUserOutput() *UpdateUserOutput {
+	return &UpdateUserOutput{}
+}

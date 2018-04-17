@@ -5,11 +5,7 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/library/strutil"
 )
 
-const (
-	SignatureLength = 65
-)
-
-type Signature [SignatureLength]byte
+type Signature [AuthSignatureLength]byte
 
 func (sig Signature) Bytes() []byte {
 	return sig[:]
@@ -20,11 +16,11 @@ func NewSignatureFromHex(sigHex string) Signature {
 
 	copy(sig[:], common.FromHex(sigHex))
 
-	switch sig[SignatureLength-1] {
+	switch sig[AuthSignatureLength-1] {
 	case 27:
-		sig[SignatureLength-1] = 0
+		sig[AuthSignatureLength-1] = 0
 	case 28:
-		sig[SignatureLength-1] = 1
+		sig[AuthSignatureLength-1] = 1
 	}
 
 	return sig
@@ -35,7 +31,7 @@ func ValidateSignatureHex(sigHex string) error {
 		sigHex = sigHex[2:]
 	}
 
-	if len(sigHex) != 2*SignatureLength {
+	if len(sigHex) != 2*AuthSignatureLength {
 		return ErrInvalidSignatureLength
 	}
 	if !strutil.IsHex(sigHex) {
