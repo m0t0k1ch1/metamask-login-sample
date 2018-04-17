@@ -6,15 +6,19 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
 )
 
-type Application struct {
+type Application interface {
+	GetUser(ctx context.Context, in *GetUserInput) (*GetUserOutput, error)
+}
+
+type applicationImpl struct {
 	*application.Core
 }
 
-func NewApplication(core *application.Core) *Application {
-	return &Application{core}
+func NewApplication(core *application.Core) Application {
+	return &applicationImpl{core}
 }
 
-func (app *Application) GetUser(ctx context.Context, in *GetUserInput) (*GetUserOutput, error) {
+func (app *applicationImpl) GetUser(ctx context.Context, in *GetUserInput) (*GetUserOutput, error) {
 	if err := in.Validate(); err != nil {
 		return nil, err
 	}

@@ -8,15 +8,20 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 )
 
-type Application struct {
+type Application interface {
+	Challenge(ctx context.Context, in *ChallengeInput) (*ChallengeOutput, error)
+	Authorize(ctx context.Context, in *AuthorizeInput) (*AuthorizeOutput, error)
+}
+
+type applicationImpl struct {
 	*application.Core
 }
 
-func NewApplication(core *application.Core) *Application {
-	return &Application{core}
+func NewApplication(core *application.Core) Application {
+	return &applicationImpl{core}
 }
 
-func (app *Application) Challenge(ctx context.Context, in *ChallengeInput) (*ChallengeOutput, error) {
+func (app *applicationImpl) Challenge(ctx context.Context, in *ChallengeInput) (*ChallengeOutput, error) {
 	if err := in.Validate(); err != nil {
 		return nil, err
 	}
@@ -47,7 +52,7 @@ func (app *Application) Challenge(ctx context.Context, in *ChallengeInput) (*Cha
 	return NewChallengeOutput(u.Challenge), nil
 }
 
-func (app *Application) Authorize(ctx context.Context, in *AuthorizeInput) (*AuthorizeOutput, error) {
+func (app *applicationImpl) Authorize(ctx context.Context, in *AuthorizeInput) (*AuthorizeOutput, error) {
 	if err := in.Validate(); err != nil {
 		return nil, err
 	}
