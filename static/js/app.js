@@ -154,6 +154,7 @@ new Vue({
       })
     },
     logout: function() {
+      delete client.defaults.headers.common['Authorization']
       this.user = null
     },
   },
