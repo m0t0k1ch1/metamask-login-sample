@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/labstack/echo"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain"
+	"github.com/m0t0k1ch1/metamask-login-sample/application"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler/api/users"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler/auth"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/middleware"
@@ -10,15 +10,18 @@ import (
 
 type Server struct {
 	*echo.Echo
-	config    *Config
-	container *domain.Container
+	config *Config
+	core   *application.Core
 }
 
 func New(conf *Config) *Server {
 	srv := &Server{
-		Echo:      echo.New(),
-		config:    conf,
-		container: newContainer(conf),
+		Echo:   echo.New(),
+		config: conf,
+		core: application.NewCore(
+			newContainer(conf),
+			conf.App,
+		),
 	}
 
 	srv.Logger.SetLevel(srv.config.LogLvl())
