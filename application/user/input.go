@@ -1,45 +1,34 @@
 package user
 
 import (
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
+	"github.com/m0t0k1ch1/metamask-login-sample/application"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 )
 
 type GetUserInput struct {
-	AddressHex string
+	*application.AddressHexInput
 }
 
 func NewGetUserInput(addressHex string) *GetUserInput {
 	return &GetUserInput{
-		AddressHex: addressHex,
+		AddressHexInput: application.NewAddressHexInput(addressHex),
 	}
-}
-
-func (in *GetUserInput) Validate() error {
-	if err := common.ValidateAddressHex(in.AddressHex); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (in *GetUserInput) Address() common.Address {
-	return common.NewAddressFromHex(in.AddressHex)
 }
 
 type UpdateUserInput struct {
-	AddressHex string
-	Name       string
+	*application.AddressHexInput
+	Name string
 }
 
 func NewUpdateUserInput(addressHex, name string) *UpdateUserInput {
 	return &UpdateUserInput{
-		AddressHex: addressHex,
-		Name:       name,
+		AddressHexInput: application.NewAddressHexInput(addressHex),
+		Name:            name,
 	}
 }
 
 func (in *UpdateUserInput) Validate() error {
-	if err := common.ValidateAddressHex(in.AddressHex); err != nil {
+	if err := in.AddressHexInput.Validate(); err != nil {
 		return err
 	}
 	if err := user.ValidateUserName(in.Name); err != nil {
@@ -48,27 +37,12 @@ func (in *UpdateUserInput) Validate() error {
 	return nil
 }
 
-func (in *UpdateUserInput) Address() common.Address {
-	return common.NewAddressFromHex(in.AddressHex)
-}
-
 type DeleteUserInput struct {
-	AddressHex string
+	*application.AddressHexInput
 }
 
 func NewDeleteUserInput(addressHex string) *DeleteUserInput {
 	return &DeleteUserInput{
-		AddressHex: addressHex,
+		AddressHexInput: application.NewAddressHexInput(addressHex),
 	}
-}
-
-func (in *DeleteUserInput) Validate() error {
-	if err := common.ValidateAddressHex(in.AddressHex); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (in *DeleteUserInput) Address() common.Address {
-	return common.NewAddressFromHex(in.AddressHex)
 }
