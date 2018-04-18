@@ -41,9 +41,6 @@ func (g *Group) DELETE(path string, h handler.HandlerFunc) {
 
 func (g *Group) Add(method, path string, h handler.HandlerFunc) {
 	g.group.Add(method, path, func(ec echo.Context) error {
-		return h(&handler.Context{
-			Context: ec,
-			Core:    g.server.core,
-		})
+		return h(handler.NewContext(ec, g.server.core))
 	})
 }

@@ -5,7 +5,6 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler/api/users"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler/auth"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/middleware"
 )
 
 type Server struct {
@@ -33,8 +32,11 @@ func New(conf *Config) *Server {
 	authGroup.POST("/challenge", auth.ChallengeHandler)
 	authGroup.POST("/authorize", auth.AuthorizeHandler)
 
+	authenticator := NewAuthenticator(srv.config.App.Auth.Secret)
+	verifier := users.NewVerifier()
+
 	apiGroup := srv.Group("/api")
-	apiGroup.Use(middleware.NewAuthenticator(srv.config.App.Auth.Secret))
+	apiGroup.Use(authenticator, verifier)
 	apiGroup.GET("/users/:address", users.GetHandler)
 	apiGroup.PUT("/users/:address", users.UpdateHandler)
 	apiGroup.DELETE("/users/:address", users.DeleteHandler)

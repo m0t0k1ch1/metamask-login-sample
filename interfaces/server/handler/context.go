@@ -12,6 +12,13 @@ type Context struct {
 	Core *application.Core
 }
 
+func NewContext(ec echo.Context, core *application.Core) *Context {
+	return &Context{
+		Context: ec,
+		Core:    core,
+	}
+}
+
 func (c *Context) Claims() *metamask.Claims {
 	return c.Get("user").(*jwt.Token).Claims.(*metamask.Claims)
 }

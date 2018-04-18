@@ -1,7 +1,6 @@
 package users
 
 import (
-	"github.com/labstack/echo"
 	"github.com/m0t0k1ch1/metamask-login-sample/application/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/response"
@@ -9,10 +8,6 @@ import (
 
 func GetHandler(c *handler.Context) error {
 	addressHex := c.Param("address")
-
-	if c.Claims().AddressHex != addressHex {
-		return echo.ErrNotFound
-	}
 
 	app := user.NewApplication(c.Core)
 
@@ -31,10 +26,6 @@ func UpdateHandler(c *handler.Context) error {
 	addressHex := c.Param("address")
 	name := c.FormValue("name")
 
-	if c.Claims().AddressHex != addressHex {
-		return echo.ErrNotFound
-	}
-
 	app := user.NewApplication(c.Core)
 
 	ctx := c.Request().Context()
@@ -50,10 +41,6 @@ func UpdateHandler(c *handler.Context) error {
 
 func DeleteHandler(c *handler.Context) error {
 	addressHex := c.Param("address")
-
-	if c.Claims().AddressHex != addressHex {
-		return echo.ErrNotFound
-	}
 
 	app := user.NewApplication(c.Core)
 
