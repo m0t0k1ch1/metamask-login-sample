@@ -32,9 +32,10 @@ func (s *service) SetUpChallenge(u *user.User) error {
 }
 
 func (s *service) VerifyResponse(u *user.User, responseBytes []byte) error {
-	challenge := newChallenge(u.Challenge)
-
-	pubkey, err := crypto.SigToPub(challenge.signatureHashBytes(), responseBytes)
+	pubkey, err := crypto.SigToPub(
+		challenge(u.Challenge).signatureHashBytes(),
+		responseBytes,
+	)
 	if err != nil {
 		return err
 	}

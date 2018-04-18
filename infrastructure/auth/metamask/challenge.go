@@ -9,23 +9,11 @@ const (
 	challengeName = "challenge"
 )
 
-type challenge struct {
-	t string
-	n string
-	v string
-}
+type challenge string
 
-func newChallenge(value string) *challenge {
-	return &challenge{
-		t: challengeType,
-		n: challengeName,
-		v: value,
-	}
-}
-
-func (challenge *challenge) signatureHashBytes() []byte {
+func (chal challenge) signatureHashBytes() []byte {
 	return crypto.Keccak256(
-		crypto.Keccak256([]byte(challenge.t+" "+challenge.n)),
-		crypto.Keccak256([]byte(challenge.v)),
+		crypto.Keccak256([]byte(challengeType+" "+challengeName)),
+		crypto.Keccak256([]byte(chal)),
 	)
 }
