@@ -3,8 +3,12 @@ package auth
 import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application/auth"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/response"
 )
+
+func SetUpHandlers(g *handler.Group) {
+	g.POST("/challenge", ChallengeHandler)
+	g.POST("/authorize", AuthorizeHandler)
+}
 
 func ChallengeHandler(c *handler.Context) error {
 	addressHex := c.FormValue("address")
@@ -16,10 +20,10 @@ func ChallengeHandler(c *handler.Context) error {
 
 	out, err := app.Challenge(ctx, in)
 	if err != nil {
-		return response.JSONError(c, err)
+		return c.JSONError(err)
 	}
 
-	return response.JSONSuccess(c, out)
+	return c.JSONSuccess(out)
 }
 
 func AuthorizeHandler(c *handler.Context) error {
@@ -33,8 +37,8 @@ func AuthorizeHandler(c *handler.Context) error {
 
 	out, err := app.Authorize(ctx, in)
 	if err != nil {
-		return response.JSONError(c, err)
+		return c.JSONError(err)
 	}
 
-	return response.JSONSuccess(c, out)
+	return c.JSONSuccess(out)
 }

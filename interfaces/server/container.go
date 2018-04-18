@@ -6,7 +6,7 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/cache/user"
 )
 
-func newContainer(conf *Config) *domain.Container {
+func NewContainer(conf *Config) *domain.Container {
 	return &domain.Container{
 		Services: &domain.Services{
 			Auth: metamask.NewService(

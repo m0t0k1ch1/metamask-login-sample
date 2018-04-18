@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/m0t0k1ch1/metamask-login-sample/interfaces"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 )
 
@@ -41,7 +42,7 @@ func main() {
 		panic(err)
 	}
 
-	srv := server.New(conf)
+	srv := interfaces.NewServer(conf)
 
 	done := make(chan bool, 1)
 	go func() {

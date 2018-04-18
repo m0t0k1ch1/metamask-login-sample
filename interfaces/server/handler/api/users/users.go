@@ -3,8 +3,14 @@ package users
 import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/response"
 )
+
+func SetUpHandlers(g *handler.Group) {
+	verifier := newVerifier()
+	g.GET("/:address", GetHandler, verifier)
+	g.PUT("/:address", UpdateHandler, verifier)
+	g.DELETE("/:address", DeleteHandler, verifier)
+}
 
 func GetHandler(c *handler.Context) error {
 	addressHex := c.Param("address")
@@ -16,10 +22,10 @@ func GetHandler(c *handler.Context) error {
 
 	out, err := app.GetUser(ctx, in)
 	if err != nil {
-		return response.JSONError(c, err)
+		return c.JSONError(err)
 	}
 
-	return response.JSONSuccess(c, out)
+	return c.JSONSuccess(out)
 }
 
 func UpdateHandler(c *handler.Context) error {
@@ -33,10 +39,10 @@ func UpdateHandler(c *handler.Context) error {
 
 	out, err := app.UpdateUser(ctx, in)
 	if err != nil {
-		return response.JSONError(c, err)
+		return c.JSONError(err)
 	}
 
-	return response.JSONSuccess(c, out)
+	return c.JSONSuccess(out)
 }
 
 func DeleteHandler(c *handler.Context) error {
@@ -49,8 +55,8 @@ func DeleteHandler(c *handler.Context) error {
 
 	out, err := app.DeleteUser(ctx, in)
 	if err != nil {
-		return response.JSONError(c, err)
+		return c.JSONError(err)
 	}
 
-	return response.JSONSuccess(c, out)
+	return c.JSONSuccess(out)
 }
