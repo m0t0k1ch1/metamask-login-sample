@@ -30,16 +30,20 @@ func NewServer(conf *server.Config) *Server {
 	srv.File("/", srv.Config.IndexFilePath)
 	srv.Static("/static", srv.Config.StaticDirPath)
 
-	authGroup := srv.NewGroup("/auth")
-	auth.SetUpHandlers(authGroup)
-
-	apiGroup := srv.NewGroup("/api")
-	api.SetUpHandlers(apiGroup)
+	srv.setUpHandlers()
 
 	return srv
 }
 
-func (srv *Server) NewGroup(prefix string) *handler.Group {
+func (srv *Server) setUpHandlers() {
+	authGroup := srv.newGroup("/auth")
+	auth.SetUpHandlers(authGroup)
+
+	apiGroup := srv.newGroup("/api")
+	api.SetUpHandlers(apiGroup)
+}
+
+func (srv *Server) newGroup(prefix string) *handler.Group {
 	return &handler.Group{
 		Group:  srv.Echo.Group(prefix),
 		Config: srv.Config,
