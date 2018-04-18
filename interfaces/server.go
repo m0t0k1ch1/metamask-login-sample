@@ -34,7 +34,7 @@ func NewServer(conf *server.Config) *Server {
 }
 
 func (srv *Server) setUpHandlers() {
-	handler.SetUp(&server.Group{
+	handler.SetUp(&server.Controller{
 		Group:  srv.Echo.Group(""),
 		Config: srv.Config,
 		Core:   srv.Core,

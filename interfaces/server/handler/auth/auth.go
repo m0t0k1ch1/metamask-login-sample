@@ -5,9 +5,9 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 )
 
-func SetUp(g *server.Group) {
-	g.POST("/challenge", ChallengeHandler)
-	g.POST("/authorize", AuthorizeHandler)
+func SetUp(cntl *server.Controller) {
+	cntl.POST("/challenge", ChallengeHandler)
+	cntl.POST("/authorize", AuthorizeHandler)
 }
 
 func ChallengeHandler(c *server.Context) error {

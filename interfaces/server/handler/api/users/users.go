@@ -5,11 +5,11 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 )
 
-func SetUp(g *server.Group) {
+func SetUp(cntl *server.Controller) {
 	verifier := NewVerifier()
-	g.GET("/:address", GetHandler, verifier)
-	g.PUT("/:address", UpdateHandler, verifier)
-	g.DELETE("/:address", DeleteHandler, verifier)
+	cntl.GET("/:address", GetHandler, verifier)
+	cntl.PUT("/:address", UpdateHandler, verifier)
+	cntl.DELETE("/:address", DeleteHandler, verifier)
 }
 
 func GetHandler(c *server.Context) error {
