@@ -2,17 +2,17 @@ package users
 
 import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application/user"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler"
+	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 )
 
-func SetUpHandlers(g *handler.Group) {
+func SetUp(g *server.Group) {
 	verifier := NewVerifier()
 	g.GET("/:address", GetHandler, verifier)
 	g.PUT("/:address", UpdateHandler, verifier)
 	g.DELETE("/:address", DeleteHandler, verifier)
 }
 
-func GetHandler(c *handler.Context) error {
+func GetHandler(c *server.Context) error {
 	addressHex := c.Param("address")
 
 	app := user.NewApplication(c.Core)
@@ -28,7 +28,7 @@ func GetHandler(c *handler.Context) error {
 	return c.JSONSuccess(out)
 }
 
-func UpdateHandler(c *handler.Context) error {
+func UpdateHandler(c *server.Context) error {
 	addressHex := c.Param("address")
 	name := c.FormValue("name")
 
@@ -45,7 +45,7 @@ func UpdateHandler(c *handler.Context) error {
 	return c.JSONSuccess(out)
 }
 
-func DeleteHandler(c *handler.Context) error {
+func DeleteHandler(c *server.Context) error {
 	addressHex := c.Param("address")
 
 	app := user.NewApplication(c.Core)

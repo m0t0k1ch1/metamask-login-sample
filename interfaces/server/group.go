@@ -1,23 +1,23 @@
-package handler
+package server
 
 import (
 	"net/http"
 
 	"github.com/labstack/echo"
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 )
 
 type Group struct {
 	*echo.Group
-	Config *server.Config
+	Config *Config
 	Core   *application.Core
 }
 
 func (g *Group) NewGroup(prefix string) *Group {
 	return &Group{
-		Group: g.Group.Group(prefix),
-		Core:  g.Core,
+		Group:  g.Group.Group(prefix),
+		Config: g.Config,
+		Core:   g.Core,
 	}
 }
 

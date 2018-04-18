@@ -5,8 +5,6 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler/api"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler/auth"
 )
 
 type Server struct {
@@ -36,19 +34,11 @@ func NewServer(conf *server.Config) *Server {
 }
 
 func (srv *Server) setUpHandlers() {
-	authGroup := srv.newGroup("/auth")
-	auth.SetUpHandlers(authGroup)
-
-	apiGroup := srv.newGroup("/api")
-	api.SetUpHandlers(apiGroup)
-}
-
-func (srv *Server) newGroup(prefix string) *handler.Group {
-	return &handler.Group{
-		Group:  srv.Echo.Group(prefix),
+	handler.SetUp(&server.Group{
+		Group:  srv.Echo.Group(""),
 		Config: srv.Config,
 		Core:   srv.Core,
-	}
+	})
 }
 
 func (srv *Server) Start() error {

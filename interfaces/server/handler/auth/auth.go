@@ -2,15 +2,15 @@ package auth
 
 import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application/auth"
-	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server/handler"
+	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
 )
 
-func SetUpHandlers(g *handler.Group) {
+func SetUp(g *server.Group) {
 	g.POST("/challenge", ChallengeHandler)
 	g.POST("/authorize", AuthorizeHandler)
 }
 
-func ChallengeHandler(c *handler.Context) error {
+func ChallengeHandler(c *server.Context) error {
 	addressHex := c.FormValue("address")
 
 	app := auth.NewApplication(c.Core)
@@ -26,7 +26,7 @@ func ChallengeHandler(c *handler.Context) error {
 	return c.JSONSuccess(out)
 }
 
-func AuthorizeHandler(c *handler.Context) error {
+func AuthorizeHandler(c *server.Context) error {
 	addressHex := c.FormValue("address")
 	sigHex := c.FormValue("signature")
 
