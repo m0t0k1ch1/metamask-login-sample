@@ -12,14 +12,14 @@ type Response struct {
 	Result interface{} `json:"result"`
 }
 
-func newSuccessResponse(result interface{}) *Response {
+func NewSuccessResponse(result interface{}) *Response {
 	return &Response{
 		State:  ResponseStateSuccess,
 		Result: result,
 	}
 }
 
-func newErrorResponse(err *common.Error) *Response {
+func NewErrorResponse(err *common.Error) *Response {
 	return &Response{
 		State:  ResponseStateError,
 		Result: err,

@@ -6,7 +6,7 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/auth/metamask"
 )
 
-func newAuthenticator(secret string) echo.MiddlewareFunc {
+func NewAuthenticator(secret string) echo.MiddlewareFunc {
 	return middleware.JWTWithConfig(middleware.JWTConfig{
 		Claims:     &metamask.Claims{},
 		SigningKey: []byte(secret),

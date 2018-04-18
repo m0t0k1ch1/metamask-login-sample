@@ -27,7 +27,7 @@ func (c *Context) Claims() *metamask.Claims {
 }
 
 func (c *Context) JSONSuccess(result interface{}) error {
-	return c.JSON(http.StatusOK, newSuccessResponse(result))
+	return c.JSON(http.StatusOK, NewSuccessResponse(result))
 }
 
 func (c *Context) JSONError(err error) error {
@@ -39,5 +39,5 @@ func (c *Context) JSONError(err error) error {
 		result = common.NewUnexpectedError()
 	}
 
-	return c.JSON(http.StatusOK, newErrorResponse(result))
+	return c.JSON(http.StatusOK, NewErrorResponse(result))
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func SetUpHandlers(g *handler.Group) {
-	authenticator := newAuthenticator(g.Config.App.Auth.Secret)
+	authenticator := NewAuthenticator(g.Config.App.Auth.Secret)
 	g.Use(authenticator)
 
 	usersGroup := g.NewGroup("/users")

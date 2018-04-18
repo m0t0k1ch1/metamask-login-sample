@@ -6,7 +6,7 @@ import (
 )
 
 func SetUpHandlers(g *handler.Group) {
-	verifier := newVerifier()
+	verifier := NewVerifier()
 	g.GET("/:address", GetHandler, verifier)
 	g.PUT("/:address", UpdateHandler, verifier)
 	g.DELETE("/:address", DeleteHandler, verifier)
