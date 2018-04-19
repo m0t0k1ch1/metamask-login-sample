@@ -6,26 +6,20 @@ import locale from 'element-ui/lib/locale/lang/en';
 import Web3 from 'web3';
 import axios from 'axios';
 
+import AppError from './error.js';
+
 import '../css/reset.css';
 import 'element-ui/lib/theme-chalk/index.css';
 import '../css/style.css';
 
 Vue.use(ElementUI, {locale});
 
-function AppError(message) {
-  this.message = message;
-}
-Object.setPrototypeOf(AppError, Error);
-AppError.prototype = Object.create(Error.prototype);
-AppError.prototype.name = "AppError";
-AppError.prototype.message = "";
-AppError.prototype.constructor = AppError;
-
 let client = axios.create();
 client.interceptors.response.use((response) => {
   let data = response.data;
   if (data.state === "error") {
-    return Promise.reject(new AppError(data.result.message));
+    let result = data.result;
+    return Promise.reject(new AppError(result.code, result.message));
   }
   return response;
 })
@@ -74,7 +68,7 @@ new Vue({
         .then((result) => {
           // Are there available accounts?
           if (result.length <= 0) {
-            throw new AppError('Please unlock MetaMask account');
+            $this.throw('Please unlock MetaMask account');
           }
 
           accounts = result;
@@ -84,7 +78,7 @@ new Vue({
         .then((result) => {
           // Does MetaMask connect to Ropeten?
           if (result !== 3) {
-            throw new AppError('Please connect MetaMask to Ropsten Test Network');
+            $this.throw('Please connect MetaMask to Ropsten Test Network');
           }
 
           let params = new URLSearchParams();
@@ -154,6 +148,9 @@ new Vue({
           $this.handleError(e);
         });
     },
+    throw: function(msg) {
+      throw new AppError(0, msg);
+    },
     handleError: function(e) {
       if (typeof e === 'string') {
         if (e !== 'cancel') {
@@ -161,7 +158,11 @@ new Vue({
         }
       }
       else if (e instanceof AppError) {
-        this.warn(e.message);
+        if (e.code > 0) {
+          this.warn(e.message + ' [' + e.code + ']');
+        } else {
+          this.warn(e.message);
+        }
       }
       else if (e.message.match(/User denied message signature\./)) {
         this.warn('Please accept the signature request');
@@ -170,17 +171,17 @@ new Vue({
         throw e;
       }
     },
-    info: function(message) {
+    info: function(msg) {
       this.$message({
         showClose: true,
-        message: message,
+        message: msg,
         type: 'info',
       });
     },
-    warn: function(message) {
+    warn: function(msg) {
       this.$message({
         showClose: true,
-        message: message,
+        message: msg,
         type: 'warning',
       });
     },
