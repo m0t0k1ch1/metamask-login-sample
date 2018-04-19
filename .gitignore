@@ -1,2 +1,5 @@
+.cache
+dist
 metamask-login-sample
+node_modules
 vendor

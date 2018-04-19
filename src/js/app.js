@@ -1,3 +1,17 @@
+import 'babel-polyfill';
+
+import Vue from 'vue/dist/vue.esm.js';
+import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
+import Web3 from 'web3';
+import axios from 'axios';
+
+import '../css/reset.css';
+import 'element-ui/lib/theme-chalk/index.css';
+import '../css/style.css';
+
+Vue.use(ElementUI, {locale});
+
 function AppError(message) {
   this.message = message;
 }
