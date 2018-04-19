@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+'use strict';
 
 import Vue from 'vue/dist/vue.esm.js';
 import ElementUI from 'element-ui';
