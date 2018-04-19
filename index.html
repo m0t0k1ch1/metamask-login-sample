@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
     <title>metamask-login-sample</title>
+    <link rel="icon" href="/static/img/favicon.ico">
     <link rel="stylesheet" href="/static/css/reset.css">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="/static/css/style.css">
@@ -11,23 +12,36 @@
   <body>
     <div id="app">
       <el-container>
+        <el-header>
+          <h1>metamask-login-sample</h1>
+        </el-header>
         <el-main>
           <template v-if="user === null">
-            <el-button type="primary" v-bind:disabled="isLoginButtonDisabled" @click="login">Login with MetaMask</el-button>
+            <div>
+              <el-button type="primary" v-bind:disabled="isLoginButtonDisabled" @click="login">Login with MetaMask</el-button>
+            </div>
           </template>
           <template v-else>
-            <el-form :inline="true" :model="user">
-              <el-form-item label="Name">
-                <el-input v-model="user.name" placeholder="your name"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="updateUser">Update</el-button>
-              </el-form-item>
-            </el-form>
-            <el-button type="danger" @click="deleteUser">Delete account</el-button>
-            <el-button @click="logout">Logout</el-button>
+            <div>
+              <el-form :model="user">
+                <el-form-item label="Address">
+                  <el-input v-model="user.address" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="Name">
+                  <el-input v-model="user.name" placeholder="your name"></el-input>
+                </el-form-item>
+                <el-form-item class="buttons">
+                  <el-button type="primary" @click="updateUser">Save</el-button>
+                  <el-button type="danger" @click="deleteUser">Delete</el-button>
+                  <el-button @click="logout">Logout</el-button>
+                </el-form-item>
+              </el-form>
+            </div>
           </template>
         </el-main>
+        <el-footer>
+          <a href="https://github.com/m0t0k1ch1/metamask-login-sample" target="_blank">github.com/m0t0k1ch1/metamask-login-sample</span>
+        </el-footer>
       </el-container>
     </div>
   </body>

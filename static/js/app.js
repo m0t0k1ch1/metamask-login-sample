@@ -1,19 +1,19 @@
 function AppError(message) {
-  this.message = message
+  this.message = message;
 }
-Object.setPrototypeOf(AppError, Error)
-AppError.prototype = Object.create(Error.prototype)
-AppError.prototype.name = "AppError"
-AppError.prototype.message = ""
-AppError.prototype.constructor = AppError
+Object.setPrototypeOf(AppError, Error);
+AppError.prototype = Object.create(Error.prototype);
+AppError.prototype.name = "AppError";
+AppError.prototype.message = "";
+AppError.prototype.constructor = AppError;
 
-let client = axios.create()
+let client = axios.create();
 client.interceptors.response.use((response) => {
-  let data = response.data
+  let data = response.data;
   if (data.state === "error") {
-    return Promise.reject(new AppError(data.result.message))
+    return Promise.reject(new AppError(data.result.message));
   }
-  return response
+  return response;
 })
 
 new Vue({
@@ -25,11 +25,20 @@ new Vue({
   created: function() {
     // Is MetaMask installed?
     if (typeof web3 === 'undefined') {
-      this.warn('Please install MetaMask')
-      return
+      this.warn('Please install MetaMask');
+      return;
     }
 
-    window.web3 = new Web3(web3.currentProvider)
+    // LocalStorage is available?
+    try {
+      window.localStorage;
+    }
+    catch(e) {
+      this.warn('Please allow 3rd party cookies for web3.js 1.0.0');
+      return;
+    }
+
+    window.web3 = new Web3(web3.currentProvider);
     window.web3.extend({
       property: 'app',
       methods: [{
@@ -37,106 +46,106 @@ new Vue({
         call: 'eth_signTypedData',
         params: 2,
       }],
-    })
+    });
 
-    this.isLoginButtonDisabled = false
+    this.isLoginButtonDisabled = false;
   },
   methods: {
     login: function() {
-      let $this = this
+      let $this = this;
 
-      let accounts = []
+      let accounts = [];
 
       web3.eth.getAccounts()
         .then((result) => {
           // Are there available accounts?
           if (result.length <= 0) {
-            throw new AppError('Please unlock MetaMask account')
+            throw new AppError('Please unlock MetaMask account');
           }
 
-          accounts = result
+          accounts = result;
 
-          return web3.eth.net.getId()
+          return web3.eth.net.getId();
         })
         .then((result) => {
           // Does MetaMask connect to Ropeten?
           if (result !== 3) {
-            throw new AppError('Please connect MetaMask to Ropsten Test Network')
+            throw new AppError('Please connect MetaMask to Ropsten Test Network');
           }
 
-          let params = new URLSearchParams()
-          params.append('address', accounts[0])
+          let params = new URLSearchParams();
+          params.append('address', accounts[0]);
 
-          return client.post('/auth/challenge', params)
+          return client.post('/auth/challenge', params);
         })
         .then((response) => {
-          let result = response.data.result
+          let result = response.data.result;
 
           let typedData = [{
             type: 'string',
             name: 'challenge',
             value: response.data.result.challenge,
-          }]
+          }];
 
-          return web3.app.signTypedData(typedData, accounts[0])
+          return web3.app.signTypedData(typedData, accounts[0]);
         })
         .then((result) => {
-          let params = new URLSearchParams()
-          params.append('address', accounts[0])
-          params.append('signature', result)
+          let params = new URLSearchParams();
+          params.append('address', accounts[0]);
+          params.append('signature', result);
 
-          return client.post('/auth/authorize', params)
+          return client.post('/auth/authorize', params);
         })
         .then((response) => {
-          let result = response.data.result
+          let result = response.data.result;
 
-          client.defaults.headers.common['Authorization'] = 'Bearer ' + result.token
+          client.defaults.headers.common['Authorization'] = 'Bearer ' + result.token;
 
-          return client.get('/api/users/' + accounts[0])
+          return client.get('/api/users/' + accounts[0]);
         })
         .then((response) => {
-          let result = response.data.result
+          let result = response.data.result;
 
-          $this.user = result
+          $this.user = result;
         })
         .catch((e) => {
-          $this.handleError(e)
-        })
+          $this.handleError(e);
+        });
     },
     updateUser: function() {
-      let $this = this
+      let $this = this;
 
-      let params = new URLSearchParams()
-      params.append('name', $this.user.name)
+      let params = new URLSearchParams();
+      params.append('name', $this.user.name);
 
       client.put('/api/users/' + $this.user.address, params)
         .then((response) => {
-          $this.info('success')
+          $this.info('success');
         })
         .catch((e) => {
-          $this.handleError(e)
-        })
+          $this.handleError(e);
+        });
     },
     deleteUser: function() {
-      let $this = this
+      let $this = this;
 
       client.delete('/api/users/' + $this.user.address)
         .then((response) => {
-          $this.logout()
+          $this.logout();
         })
         .catch((e) => {
-          $this.handleError(e)
-        })
+          $this.handleError(e);
+        });
     },
     handleError: function(e) {
       if (e instanceof AppError) {
-        this.warn(e.message)
+        this.warn(e.message);
       }
       else if (e.message.match(/User denied message signature\./)) {
-        this.warn('Please accept the signature request')
+        this.warn('Please accept the signature request');
       }
       else {
-        throw e
+        throw e;
       }
     },
     info: function(message) {
@@ -144,18 +153,18 @@ new Vue({
         showClose: true,
         message: message,
         type: 'info',
-      })
+      });
     },
     warn: function(message) {
       this.$message({
         showClose: true,
         message: message,
         type: 'warning',
-      })
+      });
     },
     logout: function() {
-      delete client.defaults.headers.common['Authorization']
-      this.user = null
+      delete client.defaults.headers.common['Authorization'];
+      this.user = null;
     },
   },
-})
+});
