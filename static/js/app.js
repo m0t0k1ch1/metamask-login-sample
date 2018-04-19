@@ -129,7 +129,10 @@ new Vue({
     deleteUser: function() {
       let $this = this;
 
-      client.delete('/api/users/' + $this.user.address)
+      $this.$confirm('Are you sure to delete the account?')
+        .then(_ => {
+          return client.delete('/api/users/' + $this.user.address)
+        })
         .then((response) => {
           $this.logout();
         })
@@ -138,7 +141,12 @@ new Vue({
         });
     },
     handleError: function(e) {
-      if (e instanceof AppError) {
+      if (typeof e === 'string') {
+        if (e !== 'cancel') {
+          throw e;
+        }
+      }
+      else if (e instanceof AppError) {
         this.warn(e.message);
       }
       else if (e.message.match(/User denied message signature\./)) {
