@@ -4,4 +4,4 @@ a sample application for testing login with [MetaMask](https://github.com/MetaMa
 
 ## Overview
 
-![sequence diagram](static/img/sequence-diagram.png)
+![sequence diagram](src/img/sequence-diagram.png)
