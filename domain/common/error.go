@@ -32,10 +32,10 @@ func (err *Error) Error() string {
 	return fmt.Sprintf("%s [%d]", err.Message, err.Code)
 }
 
-func NewError(code int, message string) *Error {
+func NewError(code int, msg string) *Error {
 	return &Error{
 		Code:    code,
-		Message: message,
+		Message: msg,
 	}
 }
 
