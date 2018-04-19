@@ -24,10 +24,12 @@ var (
 		"Signature is invalid",
 	)
 
-	ErrTooShortUserName = NewError(3001,
+	ErrTooShortUserName = NewError(
+		3001,
 		fmt.Sprintf("User name must be %d characters or more", UserNameLengthMin),
 	)
-	ErrTooLongUserName = NewError(3002,
+	ErrTooLongUserName = NewError(
+		3002,
 		fmt.Sprintf("User name must be %d characters or less", UserNameLengthMax),
 	)
 	ErrUserNotFound = NewError(
