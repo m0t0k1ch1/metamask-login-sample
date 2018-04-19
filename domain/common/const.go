@@ -1,7 +1,7 @@
 package common
 
 const (
-	AuthSignatureLength = 65
+	SignatureLength = 65 // bytes
 
 	UserNameLengthMin = 1
 	UserNameLengthMax = 16

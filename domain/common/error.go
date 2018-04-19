@@ -7,20 +7,41 @@ import (
 var (
 	ErrCodeUnexpected = 1000
 
-	ErrInvalidAddressHex      = NewError(2001, "Invalid address hex")
-	ErrInvalidSignatureLength = NewError(2002, "Invalid signature length")
-	ErrInvalidSignatureHex    = NewError(2003, "Invalid signature hex")
-	ErrInvalidSignature       = NewError(2004, "Invalid signature")
+	ErrInvalidAddressHex = NewError(
+		2001,
+		"Address is not hex",
+	)
+	ErrInvalidSignatureLength = NewError(
+		2002,
+		fmt.Sprintf("Signature must be %d bytes", SignatureLength),
+	)
+	ErrInvalidSignatureHex = NewError(
+		2003,
+		"Signature is not hex",
+	)
+	ErrInvalidSignature = NewError(
+		2004,
+		"Signature is invalid",
+	)
 
 	ErrTooShortUserName = NewError(3001,
-		fmt.Sprintf("Too short user name (min: %d)", UserNameLengthMin),
+		fmt.Sprintf("User name must be %d characters or more", UserNameLengthMin),
 	)
 	ErrTooLongUserName = NewError(3002,
-		fmt.Sprintf("Too long user name (max: %d)", UserNameLengthMax),
+		fmt.Sprintf("User name must be %d characters or less", UserNameLengthMax),
 	)
-	ErrUserNotFound      = NewError(3003, "User not found")
-	ErrUserAlreadyExists = NewError(3004, "User already exists")
-	ErrUserBroken        = NewError(3005, "User broken")
+	ErrUserNotFound = NewError(
+		3003,
+		"User is not found",
+	)
+	ErrUserAlreadyExists = NewError(
+		3004,
+		"User already exists",
+	)
+	ErrUserBroken = NewError(
+		3005,
+		"User was broken",
+	)
 )
 
 type Error struct {
