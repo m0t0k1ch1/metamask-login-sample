@@ -21,7 +21,7 @@ client.interceptors.response.use((response) => {
     let result = data.result;
     return Promise.reject(new AppError(result.code, result.message));
   }
-  return response;
+  return data.result;
 })
 
 new Vue({
@@ -86,13 +86,11 @@ new Vue({
 
           return client.post('/auth/challenge', params);
         })
-        .then((response) => {
-          let result = response.data.result;
-
+        .then((result) => {
           let typedData = [{
             type: 'string',
             name: 'challenge',
-            value: response.data.result.challenge,
+            value: result.challenge,
           }];
 
           return web3.app.signTypedData(typedData, accounts[0]);
@@ -104,16 +102,12 @@ new Vue({
 
           return client.post('/auth/authorize', params);
         })
-        .then((response) => {
-          let result = response.data.result;
-
+        .then((result) => {
           client.defaults.headers.common['Authorization'] = 'Bearer ' + result.token;
 
           return client.get('/api/users/' + accounts[0]);
         })
-        .then((response) => {
-          let result = response.data.result;
-
+        .then((result) => {
           $this.user = result;
         })
         .catch((e) => {
@@ -127,7 +121,7 @@ new Vue({
       params.append('name', $this.user.name);
 
       client.put('/api/users/' + $this.user.address, params)
-        .then((response) => {
+        .then((result) => {
           $this.info('success');
         })
         .catch((e) => {
@@ -141,7 +135,7 @@ new Vue({
         .then(_ => {
           return client.delete('/api/users/' + $this.user.address)
         })
-        .then((response) => {
+        .then((result) => {
           $this.logout();
         })
         .catch((e) => {
