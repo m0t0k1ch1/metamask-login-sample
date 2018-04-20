@@ -27,15 +27,15 @@
 
 [[constraint]]
   name = "github.com/labstack/echo"
-  version = "3.3.5"
+  version = "=3.3.5"
 
 [[constraint]]
   name = "github.com/ethereum/go-ethereum"
-  version = "1.8.4"
+  version = "=1.8.4"
 
 [[constraint]]
   name = "github.com/dgrijalva/jwt-go"
-  version = "3.2.0"
+  version = "=3.2.0"
 
 [prune]
   go-tests = true
