@@ -36,11 +36,11 @@ func (cntl *Controller) DELETE(path string, h HandlerFunc, m ...echo.MiddlewareF
 
 func (cntl *Controller) Add(method, path string, h HandlerFunc, m ...echo.MiddlewareFunc) {
 	cntl.Group.Add(method, path, func(c echo.Context) error {
-		return h(cntl.newContext(c))
+		return h(cntl.NewContext(c))
 	}, m...)
 }
 
-func (cntl *Controller) newContext(c echo.Context) *Context {
+func (cntl *Controller) NewContext(c echo.Context) *Context {
 	return &Context{
 		Context: c,
 		Apps:    cntl.Apps,
