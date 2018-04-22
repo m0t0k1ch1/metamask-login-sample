@@ -15,7 +15,7 @@ func SetUp(cntl *server.Controller) {
 func GetHandler(c *server.Context) error {
 	addressHex := c.Param("address")
 
-	app := user.NewApplication(c.Core)
+	app := c.NewUserApplication()
 
 	ctx := c.Request().Context()
 	in := user.NewGetUserInput(addressHex)
@@ -32,7 +32,7 @@ func UpdateHandler(c *server.Context) error {
 	addressHex := c.Param("address")
 	name := c.FormValue("name")
 
-	app := user.NewApplication(c.Core)
+	app := c.NewUserApplication()
 
 	ctx := c.Request().Context()
 	in := user.NewUpdateUserInput(addressHex, name)
@@ -48,7 +48,7 @@ func UpdateHandler(c *server.Context) error {
 func DeleteHandler(c *server.Context) error {
 	addressHex := c.Param("address")
 
-	app := user.NewApplication(c.Core)
+	app := c.NewUserApplication()
 
 	ctx := c.Request().Context()
 	in := user.NewDeleteUserInput(addressHex)

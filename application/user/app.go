@@ -12,6 +12,8 @@ type Application interface {
 	DeleteUser(ctx context.Context, in *DeleteUserInput) (*DeleteUserOutput, error)
 }
 
+type Creator func(*application.Core) Application
+
 type applicationImpl struct {
 	*application.Core
 }

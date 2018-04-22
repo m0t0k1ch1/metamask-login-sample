@@ -51,12 +51,12 @@ func main() {
 		<-sigterm
 
 		if err := srv.Shutdown(context.Background()); err != nil {
-			srv.Logger.Fatal(err)
+			srv.Logger().Fatal(err)
 		}
 		close(done)
 	}()
 	if err := srv.Start(); err != nil {
-		srv.Logger.Info(err)
+		srv.Logger().Info(err)
 	}
 	<-done
 }

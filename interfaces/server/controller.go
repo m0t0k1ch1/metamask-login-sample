@@ -4,20 +4,17 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/m0t0k1ch1/metamask-login-sample/application"
 )
 
 type Controller struct {
 	*echo.Group
-	Config *Config
-	Core   *application.Core
+	*Core
 }
 
 func (cntl *Controller) Child(prefix string) *Controller {
 	return &Controller{
-		Group:  cntl.Group.Group(prefix),
-		Config: cntl.Config,
-		Core:   cntl.Core,
+		Group: cntl.Group.Group(prefix),
+		Core:  cntl.Core,
 	}
 }
 
@@ -39,6 +36,14 @@ func (cntl *Controller) DELETE(path string, h HandlerFunc, m ...echo.MiddlewareF
 
 func (cntl *Controller) Add(method, path string, h HandlerFunc, m ...echo.MiddlewareFunc) {
 	cntl.Group.Add(method, path, func(c echo.Context) error {
-		return h(NewContext(c, cntl.Core))
+		return h(cntl.newContext(c))
 	}, m...)
+}
+
+func (cntl *Controller) newContext(c echo.Context) *Context {
+	return &Context{
+		Context:    c,
+		AppCreator: cntl.AppCreator,
+		AppCore:    cntl.AppCore,
+	}
 }
