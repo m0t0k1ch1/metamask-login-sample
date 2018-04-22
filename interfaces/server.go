@@ -2,8 +2,8 @@ package interfaces
 
 import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	"github.com/m0t0k1ch1/metamask-login-sample/application/auth"
-	"github.com/m0t0k1ch1/metamask-login-sample/application/user"
+	appAuth "github.com/m0t0k1ch1/metamask-login-sample/application/auth"
+	appUser "github.com/m0t0k1ch1/metamask-login-sample/application/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/auth/metamask"
 	cacheUser "github.com/m0t0k1ch1/metamask-login-sample/infrastructure/cache/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
@@ -27,8 +27,8 @@ func newCore(conf *server.Config) *server.Core {
 	return &server.Core{
 		Config: conf,
 		Apps: &server.Apps{
-			Auth: auth.NewApplication(appCore),
-			User: user.NewApplication(appCore),
+			Auth: appAuth.NewApplication(appCore),
+			User: appUser.NewApplication(appCore),
 		},
 	}
 }
