@@ -43,7 +43,7 @@ func (cntl *Controller) Add(method, path string, h HandlerFunc, m ...echo.Middle
 func (cntl *Controller) newContext(c echo.Context) *Context {
 	return &Context{
 		Context:    c,
-		AppCreator: cntl.AppCreator,
-		AppCore:    cntl.AppCore,
+		appCreator: cntl.appCreator,
+		appCore:    cntl.appCore,
 	}
 }

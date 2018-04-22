@@ -14,16 +14,16 @@ import (
 
 type Context struct {
 	echo.Context
-	AppCreator *AppCreator
-	AppCore    *application.Core
+	appCreator *AppCreator
+	appCore    *application.Core
 }
 
 func (c *Context) NewAuthApplication() auth.Application {
-	return c.AppCreator.Auth(c.AppCore)
+	return c.appCreator.Auth(c.appCore)
 }
 
 func (c *Context) NewUserApplication() user.Application {
-	return c.AppCreator.User(c.AppCore)
+	return c.appCreator.User(c.appCore)
 }
 
 func (c *Context) Claims() *metamask.Claims {

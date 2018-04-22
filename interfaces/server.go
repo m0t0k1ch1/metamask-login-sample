@@ -23,14 +23,14 @@ func NewServer(conf *server.Config) *server.Server {
 }
 
 func newCore(conf *server.Config) *server.Core {
-	return &server.Core{
-		Config:     conf,
-		AppCreator: newAppCreator(conf),
-		AppCore: application.NewCore(
+	return server.NewCore(
+		conf,
+		newAppCreator(conf),
+		application.NewCore(
 			newContainer(conf),
 			conf.App,
 		),
-	}
+	)
 }
 
 func newAppCreator(conf *server.Config) *server.AppCreator {
