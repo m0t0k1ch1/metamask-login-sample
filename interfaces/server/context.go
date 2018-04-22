@@ -27,7 +27,17 @@ func (c *Context) NewUserApplication() user.Application {
 }
 
 func (c *Context) Claims() *metamask.Claims {
-	return c.Get("user").(*jwt.Token).Claims.(*metamask.Claims)
+	u := c.Get("user")
+	if u == nil {
+		return nil
+	}
+
+	token, ok := u.(*jwt.Token)
+	if !ok {
+		return nil
+	}
+
+	return token.Claims.(*metamask.Claims)
 }
 
 func (c *Context) JSONSuccess(result interface{}) error {
