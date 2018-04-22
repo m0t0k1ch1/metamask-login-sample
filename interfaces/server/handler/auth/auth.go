@@ -13,12 +13,10 @@ func SetUp(cntl *server.Controller) {
 func ChallengeHandler(c *server.Context) error {
 	addressHex := c.FormValue("address")
 
-	app := c.NewAuthApplication()
-
 	ctx := c.Request().Context()
 	in := auth.NewChallengeInput(addressHex)
 
-	out, err := app.Challenge(ctx, in)
+	out, err := c.Apps.Auth.Challenge(ctx, in)
 	if err != nil {
 		return c.JSONError(err)
 	}
@@ -30,12 +28,10 @@ func AuthorizeHandler(c *server.Context) error {
 	addressHex := c.FormValue("address")
 	sigHex := c.FormValue("signature")
 
-	app := c.NewAuthApplication()
-
 	ctx := c.Request().Context()
 	in := auth.NewAuthorizeInput(addressHex, sigHex)
 
-	out, err := app.Authorize(ctx, in)
+	out, err := c.Apps.Auth.Authorize(ctx, in)
 	if err != nil {
 		return c.JSONError(err)
 	}

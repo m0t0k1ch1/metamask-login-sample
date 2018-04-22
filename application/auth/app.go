@@ -13,8 +13,6 @@ type Application interface {
 	Authorize(ctx context.Context, in *AuthorizeInput) (*AuthorizeOutput, error)
 }
 
-type Creator func(*application.Core) Application
-
 type applicationImpl struct {
 	*application.Core
 }

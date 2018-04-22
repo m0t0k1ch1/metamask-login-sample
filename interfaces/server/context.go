@@ -5,25 +5,13 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
-	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	"github.com/m0t0k1ch1/metamask-login-sample/application/auth"
-	"github.com/m0t0k1ch1/metamask-login-sample/application/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
 	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/auth/metamask"
 )
 
 type Context struct {
 	echo.Context
-	appCreator *AppCreator
-	appCore    *application.Core
-}
-
-func (c *Context) NewAuthApplication() auth.Application {
-	return c.appCreator.Auth(c.appCore)
-}
-
-func (c *Context) NewUserApplication() user.Application {
-	return c.appCreator.User(c.appCore)
+	Apps *Apps
 }
 
 func (c *Context) Claims() *metamask.Claims {

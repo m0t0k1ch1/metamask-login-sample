@@ -2,8 +2,8 @@ package interfaces
 
 import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	appAuth "github.com/m0t0k1ch1/metamask-login-sample/application/auth"
-	appUser "github.com/m0t0k1ch1/metamask-login-sample/application/user"
+	"github.com/m0t0k1ch1/metamask-login-sample/application/auth"
+	"github.com/m0t0k1ch1/metamask-login-sample/application/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/auth/metamask"
 	cacheUser "github.com/m0t0k1ch1/metamask-login-sample/infrastructure/cache/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/interfaces/server"
@@ -22,26 +22,23 @@ func NewServer(conf *server.Config) *server.Server {
 }
 
 func newCore(conf *server.Config) *server.Core {
-	return server.NewCore(
-		conf,
-		newAppCreator(conf),
-		newAppCore(conf),
-	)
-}
+	appCore := newAppCore(conf.App)
 
-func newAppCreator(conf *server.Config) *server.AppCreator {
-	return &server.AppCreator{
-		Auth: appAuth.NewApplication,
-		User: appUser.NewApplication,
+	return &server.Core{
+		Config: conf,
+		Apps: &server.Apps{
+			Auth: auth.NewApplication(appCore),
+			User: user.NewApplication(appCore),
+		},
 	}
 }
 
-func newAppCore(conf *server.Config) *application.Core {
+func newAppCore(conf *application.Config) *application.Core {
 	return &application.Core{
 		Services: &application.Services{
 			Auth: metamask.NewService(
-				conf.App.Auth.Secret,
-				conf.App.Auth.TokenExpiryDuration(),
+				conf.Auth.Secret,
+				conf.Auth.TokenExpiryDuration(),
 			),
 		},
 		Repositories: &application.Repositories{
