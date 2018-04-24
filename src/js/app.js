@@ -17,7 +17,7 @@ Vue.use(ElementUI, {locale});
 let client = axios.create();
 client.interceptors.response.use((response) => {
   let data = response.data;
-  if (data.state === "error") {
+  if (data.state === 'error') {
     let result = data.result;
     return Promise.reject(new AppError(result.code, result.message));
   }
