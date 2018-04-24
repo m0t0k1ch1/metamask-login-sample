@@ -36,12 +36,12 @@ new Vue({
     login: async function() {
       try {
         let address = await getAddress();
-        if (address === null) { // Are there available accounts?
+        if (address === null) {
           throw new AppError('Please unlock MetaMask account');
         }
 
         let networkId = await getNetworkId();
-        if (networkId !== 3) { // Does MetaMask connect to Ropeten?
+        if (networkId !== 3) {
           throw new AppError('Please connect MetaMask to Ropsten Test Network');
         }
 
@@ -121,12 +121,10 @@ new Vue({
 
 function initWeb3() {
   return new Promise((resolve, reject) => {
-    // Is MetaMask installed?
     if (typeof web3 === 'undefined') {
       return reject(new AppError('Please install MetaMask'));
     }
 
-    // LocalStorage is available?
     try {
       window.localStorage;
     }
