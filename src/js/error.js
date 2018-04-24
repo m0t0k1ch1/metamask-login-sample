@@ -1,9 +1,9 @@
 'use strict';
 
-let AppError = function(code, message) {
-  this.code = code;
+let AppError = function(message, code = 0) {
   this.message = message;
+  this.code    = code;
 };
-AppError.prototype.name = "AppError";
+AppError.prototype.name = 'AppError';
 
 module.exports = AppError;
