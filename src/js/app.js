@@ -40,12 +40,18 @@ new Vue({
       while (true) {
         try {
           await Util.sleep(1);
-          if (this.isObservationEnabled) {
-            let address = await getAddress();
-            if (address !== this.user.address) {
-              this.warn('Account has changed');
-              this.logout();
-            }
+
+          if (!this.isObservationEnabled) {
+            continue;
+          }
+
+          let address = await getAddress();
+          if (address === this.user.address) {
+            continue;
+          }
+          else {
+            this.warn('Account has changed');
+            this.logout();
           }
         }
         catch (e) {
