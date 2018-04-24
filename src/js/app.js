@@ -8,6 +8,7 @@ import Web3 from 'web3';
 
 import AppClient from './client.js';
 import AppError from './error.js';
+import Util from './util.js';
 
 import '../css/reset.css';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -21,18 +22,37 @@ new Vue({
   el: '#app',
   data: {
     isLoginButtonDisabled: true,
+    isObservationEnabled: false,
     user: null,
   },
   created: async function() {
     try {
       await initWeb3();
       this.isLoginButtonDisabled = false;
+      this.observe();
     }
     catch (e) {
       this.handleError(e);
     }
   },
   methods: {
+    observe: async function() {
+      while (true) {
+        try {
+          await Util.sleep(1);
+          if (this.isObservationEnabled) {
+            let address = await getAddress();
+            if (address !== this.user.address) {
+              this.warn('Account has changed');
+              this.logout();
+            }
+          }
+        }
+        catch (e) {
+          this.handleError(e);
+        }
+      }
+    },
     login: async function() {
       try {
         let address = await getAddress();
@@ -51,7 +71,8 @@ new Vue({
 
         appClient.setToken(authorizeResult.token);
 
-        this.user = await appClient.getUser(address);
+        this.user                 = await appClient.getUser(address);
+        this.isObservationEnabled = true;
       }
       catch (e) {
         this.handleError(e);
@@ -114,7 +135,9 @@ new Vue({
     },
     logout: function() {
       appClient.initToken();
-      this.user = null;
+
+      this.isObservationEnabled = false;
+      this.user                 = null;
     },
   },
 });
