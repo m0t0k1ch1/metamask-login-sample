@@ -16,7 +16,7 @@ import '../css/style.css';
 
 Vue.use(ElementUI, {locale});
 
-let appClient = new AppClient();
+const appClient = new AppClient();
 
 new Vue({
   el: '#app',
