@@ -50,7 +50,7 @@ new Vue({
             continue;
           }
           else {
-            this.warn('Account has changed');
+            this.$alert('Account has changed');
             this.logout();
           }
         }
