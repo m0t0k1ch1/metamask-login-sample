@@ -100,6 +100,7 @@ new Vue({
         await this.$confirm('Are you sure to delete the account?');
         await appClient.deleteUser(this.user.address);
         this.logout();
+        this.info('Success');
       }
       catch (e) {
         this.handleError(e);
