@@ -33,6 +33,10 @@ main .buttons  {
     padding: 20px 0;
 }
 
+main .el-form-item {
+    margin: 0 0 10px;
+}
+
 footer {
     margin-top: auto;
     height: 60px;
@@ -43,8 +47,4 @@ footer a {
     color: #ccc;
     font-size: 12px;
     line-height: 60px;
-}
-
-.el-form-item {
-    margin: 0 0 10px;
 }
