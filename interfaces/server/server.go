@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 )
 
 type Server struct {
@@ -54,7 +54,7 @@ func (srv *Server) httpErrorHandler(err error, c echo.Context) {
 		msg = fmt.Sprintf("%v", httpErr.Message)
 	}
 
-	appErr := common.NewError(code, msg)
+	appErr := domain.NewError(code, msg)
 	srv.e.Logger.Error(appErr)
 
 	if !c.Response().Committed {

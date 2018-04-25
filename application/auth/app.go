@@ -4,8 +4,7 @@ import (
 	"context"
 
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 )
 
 type Application interface {
@@ -37,8 +36,8 @@ func (app *applicationImpl) Challenge(ctx context.Context, in *ChallengeInput) (
 		if err := app.Repositories.User.Update(ctx, u); err != nil {
 			return nil, err
 		}
-	case common.ErrUserNotFound:
-		u = user.NewUser("", address)
+	case domain.ErrUserNotFound:
+		u = domain.NewUser("", address)
 		if err := app.Services.Auth.SetUpChallenge(u); err != nil {
 			return nil, err
 		}

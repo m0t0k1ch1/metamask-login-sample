@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/m0t0k1ch1/metamask-login-sample/application"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 )
 
 type GetUserInput struct {
@@ -31,7 +31,7 @@ func (in *UpdateUserInput) Validate() error {
 	if err := in.AddressHexInput.Validate(); err != nil {
 		return err
 	}
-	if err := user.ValidateUserName(in.Name); err != nil {
+	if err := domain.ValidateUserName(in.Name); err != nil {
 		return err
 	}
 	return nil

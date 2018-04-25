@@ -1,11 +1,9 @@
 package auth
 
-import (
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
-)
+import "github.com/m0t0k1ch1/metamask-login-sample/domain"
 
 type Service interface {
-	SetUpChallenge(u *user.User) error
-	VerifyResponse(u *user.User, responseBytes []byte) error
-	IssueToken(u *user.User) ([]byte, error)
+	SetUpChallenge(u *domain.User) error
+	VerifyResponse(u *domain.User, responseBytes []byte) error
+	IssueToken(u *domain.User) ([]byte, error)
 }

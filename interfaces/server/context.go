@@ -5,7 +5,7 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/infrastructure/auth/metamask"
 )
 
@@ -33,12 +33,12 @@ func (c *Context) JSONSuccess(result interface{}) error {
 }
 
 func (c *Context) JSONError(err error) error {
-	var result *common.Error
-	if commonErr, ok := err.(*common.Error); ok {
-		result = commonErr
+	var result *domain.Error
+	if dErr, ok := err.(*domain.Error); ok {
+		result = dErr
 	} else {
 		c.Logger().Error(err)
-		result = common.NewUnexpectedError()
+		result = domain.NewUnexpectedError()
 	}
 
 	return c.JSON(http.StatusOK, NewErrorResponse(result))

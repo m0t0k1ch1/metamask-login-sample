@@ -4,14 +4,14 @@ import (
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 )
 
 type token struct {
 	*jwt.Token
 }
 
-func newToken(address common.Address, d time.Duration) *token {
+func newToken(address domain.Address, d time.Duration) *token {
 	return &token{jwt.NewWithClaims(
 		jwt.SigningMethodHS256, newClaims(address, d),
 	)}

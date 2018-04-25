@@ -4,9 +4,8 @@ import (
 	"time"
 
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 	"github.com/m0t0k1ch1/metamask-login-sample/domain/auth"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/user"
 	"github.com/m0t0k1ch1/metamask-login-sample/library/strutil"
 )
 
@@ -26,12 +25,12 @@ func NewService(secret string, ted time.Duration) auth.Service {
 	}
 }
 
-func (s *service) SetUpChallenge(u *user.User) error {
+func (s *service) SetUpChallenge(u *domain.User) error {
 	u.Challenge = strutil.Rand(challengeStringLength)
 	return nil
 }
 
-func (s *service) VerifyResponse(u *user.User, responseBytes []byte) error {
+func (s *service) VerifyResponse(u *domain.User, responseBytes []byte) error {
 	pubkey, err := crypto.SigToPub(
 		challenge(u.Challenge).signatureHashBytes(),
 		responseBytes,
@@ -40,14 +39,14 @@ func (s *service) VerifyResponse(u *user.User, responseBytes []byte) error {
 		return err
 	}
 
-	address := common.Address(crypto.PubkeyToAddress(*pubkey))
+	address := domain.Address(crypto.PubkeyToAddress(*pubkey))
 	if address.Hex() != u.Address.Hex() {
-		return common.ErrInvalidSignature
+		return domain.ErrInvalidSignature
 	}
 
 	return nil
 }
 
-func (s *service) IssueToken(u *user.User) ([]byte, error) {
+func (s *service) IssueToken(u *domain.User) ([]byte, error) {
 	return newToken(u.Address, s.tokenExpiryDuration).signedBytes(s.secret)
 }

@@ -1,6 +1,6 @@
 package server
 
-import "github.com/m0t0k1ch1/metamask-login-sample/domain/common"
+import "github.com/m0t0k1ch1/metamask-login-sample/domain"
 
 const (
 	ResponseStateSuccess = "success"
@@ -19,7 +19,7 @@ func NewSuccessResponse(result interface{}) *Response {
 	}
 }
 
-func NewErrorResponse(err *common.Error) *Response {
+func NewErrorResponse(err *domain.Error) *Response {
 	return &Response{
 		State:  ResponseStateError,
 		Result: err,

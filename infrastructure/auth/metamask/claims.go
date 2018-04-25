@@ -4,7 +4,7 @@ import (
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/m0t0k1ch1/metamask-login-sample/domain/common"
+	"github.com/m0t0k1ch1/metamask-login-sample/domain"
 )
 
 type Claims struct {
@@ -12,7 +12,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func newClaims(address common.Address, d time.Duration) *Claims {
+func newClaims(address domain.Address, d time.Duration) *Claims {
 	now := time.Now()
 
 	return &Claims{
