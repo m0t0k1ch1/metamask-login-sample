@@ -22,9 +22,10 @@ func (sig Signature) Bytes() []byte {
 	return sig[:]
 }
 
-func (sig *Signature) DecreaseRecoveryIdentifierRange() {
-	if sig[SignatureLength-1] >= SignatureRecoveryIdentifierRangeBase {
-		sig[SignatureLength-1] -= SignatureRecoveryIdentifierRangeBase
+// RI: Recovery Identifier
+func (sig *Signature) SwitchToLowerRIRange() {
+	if sig[SignatureLength-1] >= SignatureRIRangeBase {
+		sig[SignatureLength-1] -= SignatureRIRangeBase
 	}
 }
 
