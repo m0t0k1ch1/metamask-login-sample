@@ -32,7 +32,7 @@ func (s *service) SetUpChallenge(u *domain.User) error {
 
 func (s *service) VerifyResponse(u *domain.User, responseBytes []byte) error {
 	sig := domain.NewSignatureFromBytes(responseBytes)
-	sig.LowerRecoveryIdentifierRange()
+	sig.DecreaseRecoveryIdentifierRange()
 
 	pubkey, err := crypto.SigToPub(
 		challenge(u.Challenge).signatureHashBytes(),

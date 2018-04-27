@@ -7,16 +7,6 @@ import (
 
 type Signature [SignatureLength]byte
 
-func (sig Signature) Bytes() []byte {
-	return sig[:]
-}
-
-func (sig *Signature) LowerRecoveryIdentifierRange() {
-	if sig[SignatureLength-1] >= SignatureRecoveryIdentifierRangeBase {
-		sig[SignatureLength-1] -= SignatureRecoveryIdentifierRangeBase
-	}
-}
-
 func NewSignatureFromBytes(sigBytes []byte) Signature {
 	sig := Signature{}
 	copy(sig[:], sigBytes[:])
@@ -26,6 +16,16 @@ func NewSignatureFromBytes(sigBytes []byte) Signature {
 
 func NewSignatureFromHex(sigHex string) Signature {
 	return NewSignatureFromBytes(common.FromHex(sigHex))
+}
+
+func (sig Signature) Bytes() []byte {
+	return sig[:]
+}
+
+func (sig *Signature) DecreaseRecoveryIdentifierRange() {
+	if sig[SignatureLength-1] >= SignatureRecoveryIdentifierRangeBase {
+		sig[SignatureLength-1] -= SignatureRecoveryIdentifierRangeBase
+	}
 }
 
 func ValidateSignatureHex(sigHex string) error {

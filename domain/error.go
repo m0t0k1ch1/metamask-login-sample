@@ -51,10 +51,6 @@ type Error struct {
 	Message string `json:"message"`
 }
 
-func (err *Error) Error() string {
-	return fmt.Sprintf("%s [%d]", err.Message, err.Code)
-}
-
 func NewError(code int, msg string) *Error {
 	return &Error{
 		Code:    code,
@@ -64,4 +60,8 @@ func NewError(code int, msg string) *Error {
 
 func NewUnexpectedError() *Error {
 	return NewError(ErrCodeUnexpected, "Internal server error")
+}
+
+func (err *Error) Error() string {
+	return fmt.Sprintf("%s [%d]", err.Message, err.Code)
 }
