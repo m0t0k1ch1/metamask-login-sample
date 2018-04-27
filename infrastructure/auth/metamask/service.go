@@ -31,16 +31,12 @@ func (s *service) SetUpChallenge(u *domain.User) error {
 }
 
 func (s *service) VerifyResponse(u *domain.User, responseBytes []byte) error {
-	switch responseBytes[domain.SignatureLength-1] {
-	case 27:
-		responseBytes[domain.SignatureLength-1] = 0
-	case 28:
-		responseBytes[domain.SignatureLength-1] = 1
-	}
+	sig := domain.NewSignatureFromBytes(responseBytes)
+	sig.LowerRecoveryIdentifierRange()
 
 	pubkey, err := crypto.SigToPub(
 		challenge(u.Challenge).signatureHashBytes(),
-		responseBytes,
+		sig.Bytes(),
 	)
 	if err != nil {
 		return err

@@ -11,6 +11,12 @@ func (sig Signature) Bytes() []byte {
 	return sig[:]
 }
 
+func (sig *Signature) LowerRecoveryIdentifierRange() {
+	if sig[SignatureLength-1] >= SignatureRecoveryIdentifierRangeBase {
+		sig[SignatureLength-1] -= SignatureRecoveryIdentifierRangeBase
+	}
+}
+
 func NewSignatureFromBytes(sigBytes []byte) Signature {
 	sig := Signature{}
 	copy(sig[:], sigBytes[:])
