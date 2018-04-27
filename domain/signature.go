@@ -11,19 +11,15 @@ func (sig Signature) Bytes() []byte {
 	return sig[:]
 }
 
-func NewSignatureFromHex(sigHex string) Signature {
+func NewSignatureFromBytes(sigBytes []byte) Signature {
 	sig := Signature{}
-
-	copy(sig[:], common.FromHex(sigHex))
-
-	switch sig[SignatureLength-1] {
-	case 27:
-		sig[SignatureLength-1] = 0
-	case 28:
-		sig[SignatureLength-1] = 1
-	}
+	copy(sig[:], sigBytes[:])
 
 	return sig
+}
+
+func NewSignatureFromHex(sigHex string) Signature {
+	return NewSignatureFromBytes(common.FromHex(sigHex))
 }
 
 func ValidateSignatureHex(sigHex string) error {
