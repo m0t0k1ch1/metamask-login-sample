@@ -11,9 +11,9 @@ var (
 		2001,
 		"Address is not hex",
 	)
-	ErrInvalidSignatureLength = NewError(
+	ErrInvalidSignatureSize = NewError(
 		2002,
-		fmt.Sprintf("Signature must be %d bytes", SignatureLength),
+		fmt.Sprintf("Signature must be %d bytes", SignatureSize),
 	)
 	ErrInvalidSignatureHex = NewError(
 		2003,

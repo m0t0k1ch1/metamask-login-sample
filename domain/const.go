@@ -1,7 +1,7 @@
 package domain
 
 const (
-	SignatureLength      = 65 // bytes
+	SignatureSize        = 65 // bytes
 	SignatureRIRangeBase = 27
 
 	UserNameLengthMin = 1

@@ -5,11 +5,15 @@ import (
 	"github.com/m0t0k1ch1/metamask-login-sample/library/strutil"
 )
 
-type Signature [SignatureLength]byte
+type Signature [SignatureSize]byte
 
 func NewSignatureFromBytes(sigBytes []byte) Signature {
 	sig := Signature{}
 	copy(sig[:], sigBytes[:])
+
+	if sig[SignatureSize-1] < SignatureRIRangeBase {
+		sig[SignatureSize-1] += SignatureRIRangeBase
+	}
 
 	return sig
 }
@@ -22,20 +26,13 @@ func (sig Signature) Bytes() []byte {
 	return sig[:]
 }
 
-// RI: Recovery Identifier
-func (sig *Signature) SwitchToLowerRIRange() {
-	if sig[SignatureLength-1] >= SignatureRIRangeBase {
-		sig[SignatureLength-1] -= SignatureRIRangeBase
-	}
-}
-
 func ValidateSignatureHex(sigHex string) error {
 	if strutil.HasHexPrefix(sigHex) {
 		sigHex = sigHex[2:]
 	}
 
-	if len(sigHex) != 2*SignatureLength {
-		return ErrInvalidSignatureLength
+	if len(sigHex) != 2*SignatureSize {
+		return ErrInvalidSignatureSize
 	}
 	if !strutil.IsHex(sigHex) {
 		return ErrInvalidSignatureHex
