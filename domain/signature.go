@@ -7,7 +7,7 @@ import (
 
 type Signature [SignatureSize]byte
 
-func NewSignatureFromBytes(sigBytes []byte) Signature {
+func newSignatureFromBytes(sigBytes []byte) Signature {
 	sig := Signature{}
 	copy(sig[:], sigBytes[:])
 
@@ -19,7 +19,7 @@ func NewSignatureFromBytes(sigBytes []byte) Signature {
 }
 
 func NewSignatureFromHex(sigHex string) Signature {
-	return NewSignatureFromBytes(common.FromHex(sigHex))
+	return newSignatureFromBytes(common.FromHex(sigHex))
 }
 
 func (sig Signature) Bytes() []byte {

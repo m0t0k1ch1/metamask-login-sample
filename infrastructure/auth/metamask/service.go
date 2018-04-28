@@ -31,14 +31,13 @@ func (s *service) SetUpChallenge(u *domain.User) error {
 }
 
 func (s *service) VerifyResponse(u *domain.User, responseBytes []byte) error {
-	sig := domain.NewSignatureFromBytes(responseBytes)
-	if sig[domain.SignatureSize-1] >= domain.SignatureRIRangeBase {
-		sig[domain.SignatureSize-1] -= domain.SignatureRIRangeBase
+	if responseBytes[domain.SignatureSize-1] >= domain.SignatureRIRangeBase {
+		responseBytes[domain.SignatureSize-1] -= domain.SignatureRIRangeBase
 	}
 
 	pubkey, err := crypto.SigToPub(
 		challenge(u.Challenge).signatureHashBytes(),
-		sig.Bytes(),
+		responseBytes,
 	)
 	if err != nil {
 		return err
