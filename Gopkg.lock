@@ -24,8 +24,8 @@
     "crypto/sha3",
     "rlp"
   ]
-  revision = "2423ae01e0d2f853512eb2b46954b5ad0754a897"
-  version = "v1.8.4"
+  revision = "37685930d953bcbe023f9bc65b135a8d8b8f1488"
+  version = "v1.8.12"
 
 [[projects]]
   name = "github.com/labstack/echo"
@@ -89,6 +89,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a4535f7a4365503eb890a0726f2b2a8c5275ec456d06a7457c7efcc72320c76b"
+  inputs-digest = "e4515db054da20c4f054ebc71aa43facaf6b02cc6ff024263003802ebac6c1c1"
   solver-name = "gps-cdcl"
   solver-version = 1
