@@ -8,7 +8,6 @@ import Web3 from 'web3';
 
 import AppClient from './client.js';
 import AppError from './error.js';
-import Util from './util.js';
 
 import '../css/reset.css';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -37,26 +36,24 @@ new Vue({
   },
   methods: {
     observe: async function() {
-      while (true) {
-        try {
-          await Util.sleep(1);
+      try {
+        setTimeout(this.observe, 1000);
 
-          if (!this.isObservationEnabled) {
-            continue;
-          }
+        if (!this.isObservationEnabled) {
+          return;
+        }
 
-          let address = await getAddress();
-          if (address === this.user.address) {
-            continue;
-          }
-          else {
-            this.$alert('Account has changed');
-            this.logout();
-          }
+        let address = await getAddress();
+        if (address === this.user.address) {
+          return
         }
-        catch (e) {
-          this.handleError(e);
+        else {
+          this.$alert('Account has changed');
+          this.logout();
         }
+      }
+      catch (e) {
+        this.handleError(e);
       }
     },
     login: async function() {
