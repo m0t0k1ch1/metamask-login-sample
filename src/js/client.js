@@ -56,4 +56,4 @@ class AppClient {
   }
 }
 
-module.exports = AppClient;
+export default AppClient;
