@@ -1,4 +1,5 @@
 .cache
+.envrc
 dist
 metamask-login-sample
 node_modules
