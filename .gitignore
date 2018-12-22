@@ -1,6 +1,5 @@
-.cache
+.cache/
 .envrc
-dist
+dist/
 metamask-login-sample
-node_modules
-vendor
+node_modules/
