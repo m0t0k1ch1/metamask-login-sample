@@ -44,4 +44,3 @@
   [[prune.project]]
     name = "github.com/ethereum/go-ethereum"
     unused-packages = false
-    non-go = false
