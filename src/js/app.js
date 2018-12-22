@@ -3,6 +3,7 @@
 import 'babel-polyfill';
 import Vue from 'vue';
 import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
 import Web3 from 'web3';
 
 import AppClient from './client.js';
@@ -12,7 +13,7 @@ import '../css/reset.css';
 import 'element-ui/lib/theme-chalk/index.css';
 import '../css/style.css';
 
-Vue.use(ElementUI);
+Vue.use(ElementUI, { locale });
 
 const appClient = new AppClient();
 
