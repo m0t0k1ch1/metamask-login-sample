@@ -10,7 +10,7 @@ https://mls.m0t0k1ch1.com
 
 ![sequence diagram](src/img/sequence-diagram.png)
 
-## Install
+## Download
 
 Please install [yarn](https://github.com/yarnpkg/yarn) in advance.
 
