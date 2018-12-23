@@ -59,6 +59,10 @@ new Vue({
     },
     login: async function() {
       try {
+        if (window.ethereum) {
+          await ethereum.enable();
+        }
+
         let address = await getAddress();
         if (address === null) {
           throw new AppError('Please unlock MetaMask account');
@@ -149,7 +153,13 @@ new Vue({
 
 function initWeb3() {
   return new Promise((resolve, reject) => {
-    if (typeof web3 === 'undefined') {
+    if (window.ethereum) {
+      window.web3 = new Web3(ethereum);
+    }
+    else if (window.web3) {
+      window.web3 = new Web3(web3.currentProvider);
+    }
+    else {
       return reject(new AppError('Please install MetaMask'));
     }
 
@@ -160,7 +170,6 @@ function initWeb3() {
       return reject(new AppError('Please allow 3rd party cookies for web3.js 1.0.0'));
     }
 
-    window.web3 = new Web3(web3.currentProvider);
     window.web3.extend({
       property: 'app',
       methods: [{
