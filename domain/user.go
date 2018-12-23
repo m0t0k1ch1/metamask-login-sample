@@ -19,10 +19,10 @@ func NewUser(name string, address Address) *User {
 
 func ValidateUserName(name string) error {
 	l := utf8.RuneCountInString(name)
-	if l <= UserNameLengthMin {
+	if l < UserNameLengthMin {
 		return ErrTooShortUserName
 	}
-	if l >= UserNameLengthMax {
+	if l > UserNameLengthMax {
 		return ErrTooLongUserName
 	}
 	return nil
