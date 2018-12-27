@@ -1,8 +1,4 @@
 {
-  "name": "metamask-login-sample",
-  "version": "0.1.0",
-  "author": "m0t0k1ch1",
-  "license": "MIT",
   "scripts": {
     "build": "./node_modules/.bin/parcel build index.html --public-url /static/",
     "clean": "rm ./dist/*"
