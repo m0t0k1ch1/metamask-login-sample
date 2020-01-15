@@ -44,7 +44,7 @@ new Vue({
           return;
         }
 
-        let address = await getAddress();
+        const address = await getAddress();
         if (address === this.user.address) {
           return
         }
@@ -63,19 +63,19 @@ new Vue({
           await ethereum.enable();
         }
 
-        let address = await getAddress();
+        const address = await getAddress();
         if (address === null) {
           throw new AppError('Please unlock MetaMask account');
         }
 
-        let networkId = await getNetworkId();
+        const networkId = await getNetworkId();
         if (networkId !== 3) {
           throw new AppError('Please connect MetaMask to Ropsten Test Network');
         }
 
-        let challengeResult = await appClient.challenge(address);
-        let signature       = await signTypedData(address, challengeResult.challenge);
-        let authorizeResult = await appClient.authorize(address, signature);
+        const challengeResult = await appClient.challenge(address);
+        const signature       = await signChallenge(address, challengeResult.challenge);
+        const authorizeResult = await appClient.authorize(address, signature);
 
         appClient.setToken(authorizeResult.token);
 
@@ -174,7 +174,7 @@ function initWeb3() {
       property: 'app',
       methods: [{
         name: 'signTypedData',
-        call: 'eth_signTypedData',
+        call: 'eth_signTypedData_v3',
         params: 2,
       }],
     });
@@ -198,10 +198,29 @@ function getNetworkId() {
   return web3.eth.net.getId();
 }
 
-function signTypedData(address, value) {
-  return web3.app.signTypedData([{
-    type: 'string',
-    name: 'challenge',
-    value: value,
-  }], address);
+async function signChallenge(signerAddress, challenge) {
+  const networkId = await getNetworkId();
+  return web3.app.signTypedData(signerAddress, JSON.stringify({
+    types: {
+      EIP712Domain: [
+        { name: 'name',    type: 'string' },
+        { name: 'version', type: 'string' },
+        { name: 'chainId', type: 'uint256' },
+        { name: 'salt',    type: 'bytes32' },
+      ],
+      Challenge: [
+        { name: 'challenge', type: 'string' },
+      ],
+    },
+    domain: {
+      name:    'metamask-login-sample',
+      version: '1',
+      chainId: networkId,
+      salt:    '0x0000000000000000000000000000000000000000000000000000000000000000',
+    },
+    primaryType: 'Challenge',
+    message: {
+      challenge: challenge,
+    },
+  }));
 }

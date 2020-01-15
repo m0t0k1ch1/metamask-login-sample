@@ -1,7 +1,8 @@
 {
   "scripts": {
     "build": "parcel build index.html --public-url /static/",
-    "clean": "rm ./dist/*"
+    "clean": "rm ./dist/*",
+    "watch": "parcel watch index.html --public-url /static/"
   },
   "dependencies": {
     "axios": "=0.19.1",
