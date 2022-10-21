@@ -69,8 +69,8 @@ new Vue({
         }
 
         let networkId = await getNetworkId();
-        if (networkId !== 3) {
-          throw new AppError('Please connect MetaMask to Ropsten Test Network');
+        if (networkId !== 5) {
+          throw new AppError('Please connect MetaMask to Goerli Test Network.');
         }
 
         let challengeResult = await appClient.challenge(address);
@@ -162,6 +162,9 @@ function initWeb3() {
     else {
       return reject(new AppError('Please install MetaMask'));
     }
+
+    // Set the default chain away from mainnet
+    window.web3.eth.defaultChain = 'goerli';
 
     try {
       window.localStorage;
