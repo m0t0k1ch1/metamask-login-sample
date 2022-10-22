@@ -11,7 +11,15 @@
     "web3": "=1.2.4"
   },
   "devDependencies": {
-    "parcel-bundler": "=1.12.4"
+    "assert": "^2.0.0",
+    "events": "^3.3.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "parcel": "^2.7.0",
+    "querystring-es3": "^0.2.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0"
   },
   "alias": {
     "vue": "./node_modules/vue/dist/vue.common.js"

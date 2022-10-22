@@ -1,5 +1,4 @@
-.cache/
-.envrc
-dist/
-metamask-login-sample
-node_modules/
+/.parcel-cache/
+/dist/
+/node_modules/
+/metamask-login-sample

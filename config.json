@@ -1,0 +1,12 @@
+{
+  "port": 1323,
+  "index_file_path": "./dist/index.html",
+  "static_dir_path": "./dist",
+  "log_level": "INFO",
+  "app": {
+    "auth": {
+      "secret": "secret",
+      "token_expiry_duration_seconds": 86400
+    }
+  }
+}

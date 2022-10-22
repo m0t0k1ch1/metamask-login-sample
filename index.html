@@ -1,10 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1.0,shrink-to-fit=no"
+    />
     <title>metamask-login-sample</title>
-    <link rel="icon" href="./src/img/favicon.ico">
+    <link rel="icon" href="./src/img/favicon.ico" />
   </head>
   <body>
     <div id="app">
@@ -13,7 +16,12 @@
       </header>
       <main>
         <template v-if="user === null">
-          <el-button type="primary" v-bind:disabled="isLoginButtonDisabled" @click="login">Login with MetaMask</el-button>
+          <el-button
+            type="primary"
+            v-bind:disabled="isLoginButtonDisabled"
+            @click="login"
+            >Login with MetaMask</el-button
+          >
         </template>
         <template v-else>
           <el-form :model="user">
@@ -32,9 +40,13 @@
         </template>
       </main>
       <footer>
-        <a href="https://github.com/m0t0k1ch1/metamask-login-sample" target="_blank">github.com/m0t0k1ch1/metamask-login-sample</a>
+        <a
+          href="https://github.com/m0t0k1ch1/metamask-login-sample"
+          target="_blank"
+          >github.com/m0t0k1ch1/metamask-login-sample</a
+        >
       </footer>
     </div>
   </body>
-  <script src="./src/js/app.js"></script>
+  <script type="module" src="./src/js/app.js"></script>
 </html>
